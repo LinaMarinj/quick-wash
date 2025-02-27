@@ -1,0 +1,44 @@
+footer {
+    position: relative;
+    background-image: url("img/carbon_BG-20.png");
+    background-color: #19191b;
+    color: white;
+    text-align: center;
+    padding-top: 50px;
+  }
+  
+  footer:before {
+    content: "";
+    height: 10px;
+    display: block;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-clip: border-box;
+    background-color: #e81c2e;
+    position: absolute;
+    left: 50%;
+    width: 70%;
+    max-width: 1540px;
+    top: -5px;
+    z-index: 20;
+    pointer-events: none;
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+  
+  footer #soporte {
+    margin-bottom: 25px;
+  }
+  
+  footer #soporte div ul {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+  }
+  
+  footer #derechos {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  

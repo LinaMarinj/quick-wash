@@ -1,0 +1,41 @@
+header {
+  position: relative;
+  z-index: 1;
+}
+
+nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 5px;
+}
+
+nav img {
+  max-height: 75px;
+}
+
+nav ul {
+  display: flex;
+  justify-content: end;
+}
+
+nav ul li {
+  margin-right: 30px;
+  list-style: none;
+}
+
+nav ul li a {
+  color: white;
+}
+
+nav button {
+  background-color: #e81c2e;
+  color: white;
+  padding: 1rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
