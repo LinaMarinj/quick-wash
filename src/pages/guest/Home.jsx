@@ -3,13 +3,14 @@ import MenuGuest from "../../components/menu/MenuGuest";
 import WhoWeAre from "./WhoWeAre";
 import OurServices from "./OurServices";
 import History from "./History";
+import Footer from "../../components/footer/Footer";
 import "two-up-element";
 
 function Home() {
   return (
     <>
       <MenuGuest />
-      <main>
+      <main id="home">
         <section id="seccionNumeroUno">
           <div>
             <h1>QUICK WASH</h1>
@@ -26,6 +27,7 @@ function Home() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 }

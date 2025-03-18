@@ -1,5 +1,6 @@
-main {
+main#home {
   position: relative;
+  background-color: #fff;
 }
 
 #seccionNumeroUno {
@@ -21,6 +22,7 @@ main {
 }
 
 #seccionNumeroDos {
+  background-color: #fff;
   display: flex;
   align-items: center;
   margin: 0 auto;

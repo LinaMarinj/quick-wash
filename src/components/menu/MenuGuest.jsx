@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./MenuGuest.css";
 
 function MenuGuest() {
@@ -25,9 +26,9 @@ function MenuGuest() {
             <a href="#seccionNumeroCinco">Contáctanos </a>
           </li>
 
-          <a href="admin2/dashboard.html">
+          <Link to="/admin">
             <button>¿Eres Administrador?</button>
-          </a>
+          </Link>
         </ul>
       </nav>
     </header>
