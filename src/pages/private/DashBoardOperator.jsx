@@ -1,12 +1,11 @@
-import "./DashBoardAdmin.css";
+import "./DashBoardOperator.css";
 import Auto from "../../assets/img/dashBoard/auto.svg";
 import Premio from "../../assets/img/dashBoard/premio.svg";
-import Servicio from "../../assets/img/dashBoard/servicio.svg";
 import Salir from "../../assets/img/dashBoard/salir.png";
-import User from "../../assets/img/dashBoard/user.webp";
+import UserOperator from "../../assets/img/dashBoard/user-operator.webp";
 import Graf from "../../components/servicesGraf/Graf";
 
-function DashBoardAdmin() {
+function DashBoardOperator() {
 
   return (
     <>
@@ -16,9 +15,6 @@ function DashBoardAdmin() {
           <div>
             <ul>
               <li>
-                <a href="#tablaServicios">Servicios</a>
-              </li>
-              <li>
                 <a href="#tablaRecompensas">Recompensas</a>
               </li>
               <li>
@@ -27,14 +23,14 @@ function DashBoardAdmin() {
                 </a>
               </li>
             </ul>
-            <img id="avatarUno" src={User} alt="foto personal" />
+            <img id="avatarUno" src={UserOperator} alt="foto personal" />
           </div>
         </nav>
       </header>
 
       <main id="mainDasboard">
         <section id="encabezado">
-          <h1>Administración de Servicios Quick Wash</h1>
+          <h1>Centro de Operaciones Quick Wash</h1>
         </section>
 
         <section className="grid grid-cols-4 grid-rows-3 gap-4">
@@ -47,9 +43,6 @@ function DashBoardAdmin() {
               </li>
               <li>
                 <img src={Premio} alt="" /> Sistema de Recompensas
-              </li>
-              <li>
-                <img src={Servicio} alt="" /> Servicios
               </li>
               <li>
                 <img src={Salir} alt="" /> Salir
@@ -89,4 +82,4 @@ function DashBoardAdmin() {
   );
 }
 
-export default DashBoardAdmin;
+export default DashBoardOperator;
