@@ -4,72 +4,9 @@ import Premio from "../../assets/img/dashBoard/premio.svg";
 import Servicio from "../../assets/img/dashBoard/servicio.svg";
 import Salir from "../../assets/img/dashBoard/salir.png";
 import User from "../../assets/img/dashBoard/user.webp";
-import ApexCharts from "apexcharts";
-import { useEffect } from "react";
+import Graf from "../../components/servicesGraf/Graf";
 
 function DashBoardAdmin() {
-  const getChartOptions = () => {
-    return {
-      series: [40, 30, 20, 10],
-      colors: ["#E81C2E", "#F25757", "#FFB3B3", "#D9D9D9"], // Paleta de rojos y grises combinada
-      chart: {
-        height: 320,
-        width: "100%",
-        type: "donut",
-      },
-      stroke: {
-        colors: ["transparent"],
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            labels: {
-              show: true,
-              name: {
-                show: true,
-                fontFamily: "Inter, sans-serif",
-              },
-              total: {
-                showAlways: true,
-                show: true,
-                label: "Servicios",
-                fontFamily: "Inter, sans-serif",
-                formatter: function (w) {
-                  const sum = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-                  return sum; // Texto total ajustado
-                },
-              },
-              value: {
-                show: true,
-                fontFamily: "Inter, sans-serif",
-                formatter: function (value) {
-                  return value + " servicios"; // Formato de valor ajustado
-                },
-              },
-            },
-            size: "80%",
-          },
-        },
-      },
-      labels: ["Lavado externo", "Lavado interno", "Brillado", "Polichado"],
-      dataLabels: {
-        enabled: false,
-      },
-      legend: {
-        position: "bottom",
-        fontFamily: "Inter, sans-serif",
-      },
-    };
-  };
-
-  useEffect(() => {
-    const chart = new ApexCharts(
-      document.getElementById("donut-chart"),
-      getChartOptions()
-    );
-    chart.render();
-    return () => chart.destroy();
-  }, []);
 
   return (
     <>
@@ -144,7 +81,7 @@ function DashBoardAdmin() {
 
           <div id="parteCinco" class="row-span-3 col-start-2 row-start-2">
             <p> Resumen de Servicios Realizados</p>
-            <div className="py-6" id="donut-chart"></div>
+            <Graf />
           </div>
         </section>
       </main>
