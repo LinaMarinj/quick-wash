@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/guest/home";
 import DashBoardAdmin from "../pages/private/DashBoardAdmin";
 import DashBoardOperator from "../pages/private/DashBoardOperator";
+import NotFound from "../pages/guest/NotFound";
 
 function AppRouter() {
   return (
@@ -10,6 +11,8 @@ function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<DashBoardAdmin />} />
         <Route path="/operator" element={<DashBoardOperator />} />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,0 +1,29 @@
+@keyframes writing {
+    0% {
+      width: 0;
+    }
+    50%,
+    100% {
+      width: 100%;
+    }
+  }
+  
+  #errorNumber {
+    color: #e81c2e;
+    font-size: 10rem;
+    overflow: hidden;
+    white-space: nowrap;
+    animation: writing 4s steps(40, end), blink-caret 0.75s step-end;
+    animation-iteration-count: 1;
+  }
+  
+  #not-found {
+    background-image: url("/notFound.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .carro-rojo {
+    height: 250px;
+  }
+  
