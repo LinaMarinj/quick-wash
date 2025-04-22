@@ -1,0 +1,119 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  
+  .left-section {
+    width: 50%;
+    background: linear-gradient(to bottom right, rgba(179, 0, 0, 0.8), rgba(102, 0, 0, 0.8)),
+      url('/images/carwasf.jpg'); /* Asegúrate de que la ruta de la imagen sea correcta en tu proyecto React */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .left-section h1 {
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .left-section p {
+    margin: 15px 0;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .read-more {
+    padding: 10px 20px;
+    background-color: white;
+    color: #b30000;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .read-more:hover {
+    background-color: #e6e6e6;
+  }
+  
+  /* Estilos de la sección derecha (formulario de login) */
+  .right-section {
+    width: 50%;
+    background: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .right-section h2 {
+    font-size: 2rem;
+  }
+  
+  .right-section p {
+    color: gray;
+    margin-bottom: 20px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    max-width: 300px;
+  }
+  
+  input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #b30000;
+    border-radius: 5px;
+    background: black;
+    color: white;
+  }
+  
+  input::placeholder {
+    color: #ccc;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #b30000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  button:hover {
+    background-color: #800000;
+  }
+  
+  .forgot-password {
+    margin-top: 10px;
+    color: #b30000;
+    cursor: pointer;
+  }
+  
+  .forgot-password:hover {
+    text-decoration: underline;
+  }
