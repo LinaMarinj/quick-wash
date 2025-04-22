@@ -22,7 +22,7 @@ function AppRouter() {
     },
     {
       path: "/registervehicles",
-      element: <FromRegisterVehicles />,
+      element: <FromRegisterVehicles/>,
     },
     
     {
