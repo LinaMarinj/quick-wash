@@ -4,21 +4,33 @@ main#home {
 }
 
 #seccionNumeroUno {
-  background-image: url("/fondoUno.webp");
+  text-align: center;
+  padding: 50px;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("/fondoUno.webp");
   background-position: 0 75%;
   justify-content: center;
   display: flex;
   align-items: center;
-  background-attachment: fixed; 
+  background-attachment: fixed;
   position: relative;
   top: -85px;
   height: 100vh;
 }
 
 #seccionNumeroUno h1 {
-  color: rgba(250, 247, 247, 0.877);
-  font-size: 4rem;
+  color: rgb(250, 247, 247);
+  font-size: 5rem;
   padding: 30px;
+  font-weight: 600;
+}
+
+.slogan {
+  font-size: 1.3rem;
+  font-style: italic;
+  color: #fff;
+  margin-top: 10px;
+  font-weight: 600;
 }
 
 #seccionNumeroDos {
@@ -160,7 +172,8 @@ main table tbody tr td {
 }
 
 #seccionNumeroCinco {
-  background-image: url("../../../public/fondoUno.webp");
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("/fondoUno.webp");
   background-position: 0 75%;
   display: flex;
   justify-content: center;

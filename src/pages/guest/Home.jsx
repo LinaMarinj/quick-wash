@@ -14,6 +14,7 @@ function Home() {
         <section id="seccionNumeroUno">
           <div>
             <h1>QUICK WASH</h1>
+            <p className="slogan">Rapidez y brillo en cada lavado</p>
           </div>
         </section>
 
