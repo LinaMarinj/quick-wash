@@ -1,7 +1,37 @@
 
-import './LoginAdmin.csss';
+import './LoginAdmin.css';
+import { usuarios } from '../../services/database';
+import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { alerta, generarToken} from '../../helpers/funciones';
 
 function LoginAdmin() {
+
+
+  const [getUser, setUser] = useState("");
+  const [getPassword, setPassword] = useState("");
+  let redireccion = useNavigate();
+
+  function buscarUsuario() {
+    let usuario = usuarios.find(
+      (item) => getUser === item.correo && getPassword === item.contrasena
+    );
+    return usuario;
+  }
+
+  function iniciarSesion() {
+    if (buscarUsuario()) {
+      let tokenAcceso = generarToken()
+      localStorage.setItem("token", tokenAcceso) 
+      alerta("Bienvenido", "Acceso al sistema", "success");
+      redireccion("/admin");
+    } else {
+      alerta("Error", "Error de credenciales", "error");
+    }
+  }
+
+
+
   return (
     <div className="container">
       <div className="left-section">
@@ -14,9 +44,9 @@ function LoginAdmin() {
         <h2>Hola De nuevo!</h2>
         <p>Ingresa tus datos</p>
         <form id="loginForm">
-          <input type="email" id="email" placeholder="Correo" required />
-          <input type="password" id="password" placeholder="Password" required />
-          <button type="submit">Login</button>
+          <input type="email" id="email" placeholder="Correo"  onChange={(e) => setUser(e.target.value)} required />
+          <input type="password" id="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
+          <button type="submit" onClick={iniciarSesion}>Login</button>
         </form>
         <p className="forgot-password">¿Olvidaste tu contrasena?</p>
       </div>

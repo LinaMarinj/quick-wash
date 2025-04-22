@@ -5,9 +5,9 @@ import Servicio from "../../assets/img/dashBoard/servicio.svg";
 import Salir from "../../assets/img/dashBoard/salir.png";
 import User from "../../assets/img/dashBoard/user.webp";
 import Graf from "../../components/servicesGraf/Graf";
+import { Link } from "react-router-dom";
 
 function DashBoardAdmin() {
-
   return (
     <>
       <header>
@@ -22,9 +22,7 @@ function DashBoardAdmin() {
                 <a href="#tablaRecompensas">Recompensas</a>
               </li>
               <li>
-                <a href="../index.html" id="">
-                  Salir
-                </a>
+                <Link to="/">Salir</Link>
               </li>
             </ul>
             <img id="avatarUno" src={User} alt="foto personal" />
