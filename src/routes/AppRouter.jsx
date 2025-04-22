@@ -4,6 +4,7 @@ import DashBoardOperator from "../pages/private/DashBoardOperator";
 import NotFound from "../pages/guest/NotFound";
 import { createBrowserRouter } from "react-router-dom";
 import { RouterProvider } from "react-router-dom";
+import FromRegisterVehicles from "../pages/private/FormRegisterVehicles";
 
 function AppRouter() {
   const rutas = [
@@ -19,6 +20,11 @@ function AppRouter() {
       path: "/operator",
       element: <DashBoardOperator />,
     },
+    {
+      path: "/registervehicles",
+      element: <FromRegisterVehicles />,
+    },
+    
     {
       path: "*",
       element: <NotFound />,
