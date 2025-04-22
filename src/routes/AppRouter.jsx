@@ -5,6 +5,7 @@ import NotFound from "../pages/guest/NotFound";
 import { createBrowserRouter } from "react-router-dom";
 import { RouterProvider } from "react-router-dom";
 import LoginAdmin from "../pages/guest/LoginAdmin";
+import RutaProtegida from "../components/RutaProtegida";
 
 function AppRouter() {
   const rutas = [
@@ -14,11 +15,11 @@ function AppRouter() {
     },
     {
       path: "/admin",
-      element: <DashBoardAdmin />,
+      element: <RutaProtegida proteger={<DashBoardAdmin />} />,
     },
     {
       path: "/operator",
-      element: <DashBoardOperator />,
+      element: <RutaProtegida proteger={<DashBoardOperator />} />,
     },
     {
       path: "/login",

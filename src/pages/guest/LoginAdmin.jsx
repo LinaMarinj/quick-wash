@@ -46,7 +46,7 @@ function LoginAdmin() {
         <form id="loginForm">
           <input type="email" id="email" placeholder="Correo"  onChange={(e) => setUser(e.target.value)} required />
           <input type="password" id="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit" onClick={iniciarSesion}>Login</button>
+          <button type="button" onClick={iniciarSesion}>Login</button>
         </form>
         <p className="forgot-password">¿Olvidaste tu contrasena?</p>
       </div>

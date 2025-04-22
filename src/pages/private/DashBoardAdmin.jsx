@@ -22,7 +22,14 @@ function DashBoardAdmin() {
                 <a href="#tablaRecompensas">Recompensas</a>
               </li>
               <li>
-                <Link to="/">Salir</Link>
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    localStorage.removeItem("token");
+                  }}
+                >
+                  Salir
+                </Link>
               </li>
             </ul>
             <img id="avatarUno" src={User} alt="foto personal" />

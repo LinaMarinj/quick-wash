@@ -18,7 +18,14 @@ function DashBoardOperator() {
                 <a href="#tablaRecompensas">Recompensas</a>
               </li>
               <li>
-                <Link to="/">Salir</Link>
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    localStorage.removeItem("token");
+                  }}
+                >
+                  Salir
+                </Link>
               </li>
             </ul>
             <img id="avatarUno" src={UserOperator} alt="foto personal" />
