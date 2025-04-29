@@ -26,8 +26,8 @@ function MenuGuest() {
             <a href="#seccionNumeroCinco">Contáctanos </a>
           </li>
 
-          <Link to="/admin">
-            <button>¿Eres Administrador?</button>
+          <Link to="/login">
+            <button>Login</button>
           </Link>
         </ul>
       </nav>

@@ -4,9 +4,9 @@ import Premio from "../../assets/img/dashBoard/premio.svg";
 import Salir from "../../assets/img/dashBoard/salir.png";
 import UserOperator from "../../assets/img/dashBoard/user-operator.webp";
 import Graf from "../../components/servicesGraf/Graf";
+import { Link } from "react-router-dom";
 
 function DashBoardOperator() {
-
   return (
     <>
       <header>
@@ -18,9 +18,14 @@ function DashBoardOperator() {
                 <a href="#tablaRecompensas">Recompensas</a>
               </li>
               <li>
-                <a href="../index.html" id="">
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    localStorage.removeItem("token");
+                  }}
+                >
                   Salir
-                </a>
+                </Link>
               </li>
             </ul>
             <img id="avatarUno" src={UserOperator} alt="foto personal" />

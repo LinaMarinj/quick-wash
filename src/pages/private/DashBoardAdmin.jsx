@@ -2,6 +2,7 @@ import "./DashBoardAdmin.css";
 import User from "../../assets/img/dashBoard/user.webp";
 import Graf from "../../components/servicesGraf/Graf";
 import ControlPanel from "./ControlPanel";
+import { Link } from "react-router-dom";
 
 function DashBoardAdmin() {
   return (
@@ -18,9 +19,14 @@ function DashBoardAdmin() {
                 <a href="#tablaRecompensas">Recompensas</a>
               </li>
               <li>
-                <a href="../index.html" id="">
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    localStorage.removeItem("token");
+                  }}
+                >
                   Salir
-                </a>
+                </Link>
               </li>
             </ul>
             <img id="avatarUno" src={User} alt="foto personal" />
