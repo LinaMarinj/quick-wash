@@ -1,10 +1,7 @@
 import "./DashBoardAdmin.css";
-import Auto from "../../assets/img/dashBoard/auto.svg";
-import Premio from "../../assets/img/dashBoard/premio.svg";
-import Servicio from "../../assets/img/dashBoard/servicio.svg";
-import Salir from "../../assets/img/dashBoard/salir.png";
 import User from "../../assets/img/dashBoard/user.webp";
 import Graf from "../../components/servicesGraf/Graf";
+import ControlPanel from "./ControlPanel";
 import { Link } from "react-router-dom";
 
 function DashBoardAdmin() {
@@ -43,24 +40,7 @@ function DashBoardAdmin() {
         </section>
 
         <section className="grid grid-cols-4 grid-rows-3 gap-4">
-          <div id="parteUno" className="row-span-5">
-            <ul>
-              <h2>Panel de Control</h2>
-              <li>
-                <img src={Auto} alt="" />
-                Ingresar Vehículo
-              </li>
-              <li>
-                <img src={Premio} alt="" /> Sistema de Recompensas
-              </li>
-              <li>
-                <img src={Servicio} alt="" /> Servicios
-              </li>
-              <li>
-                <img src={Salir} alt="" /> Salir
-              </li>
-            </ul>
-          </div>
+          <ControlPanel />
 
           <div id="parteDos">
             <h3>Vehículos Ingresados</h3>

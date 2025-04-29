@@ -4,6 +4,7 @@ import DashBoardOperator from "../pages/private/DashBoardOperator";
 import NotFound from "../pages/guest/NotFound";
 import { createBrowserRouter } from "react-router-dom";
 import { RouterProvider } from "react-router-dom";
+import FromRegisterVehicles from "../pages/private/FormRegisterVehicles";
 import LoginAdmin from "../pages/guest/LoginAdmin";
 import RutaProtegida from "../components/RutaProtegida";
 
@@ -25,6 +26,11 @@ function AppRouter() {
       path: "/login",
       element: <LoginAdmin />,
     },
+    {
+      path: "/registervehicles",
+      element: <FromRegisterVehicles/>,
+    },
+    
     {
       path: "*",
       element: <NotFound />,
