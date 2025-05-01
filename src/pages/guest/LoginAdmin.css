@@ -15,7 +15,7 @@
   .left-section {
     width: 50%;
     background: linear-gradient(to bottom right, rgba(179, 0, 0, 0.8), rgba(102, 0, 0, 0.8)),
-      url('/images/carwasf.jpg'); /* Asegúrate de que la ruta de la imagen sea correcta en tu proyecto React */
+      url('../../../public/fondoUno.webp'); /* Asegúrate de que la ruta de la imagen sea correcta en tu proyecto React */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
