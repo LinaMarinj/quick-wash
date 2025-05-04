@@ -67,12 +67,17 @@ function LoginAdmin() {
           </button>
         </form>
         <p className="forgot-password">¿Olvidaste tu contrasena?</p>
+
+
       </div>
     </div>
   );
 }
 
 export default LoginAdmin;
+
+
+
 
 
 

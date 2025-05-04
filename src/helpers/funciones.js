@@ -11,3 +11,4 @@ export function alerta(titulo, mensaje, icono) {
 export function generarToken() {
   return "token" + Math.random() * 1000 + Math.random() * 10;
 }
+
