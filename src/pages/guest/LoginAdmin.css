@@ -1,5 +1,7 @@
 
-* {
+
+
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -15,7 +17,7 @@
   .left-section {
     width: 50%;
     background: linear-gradient(to bottom right, rgba(179, 0, 0, 0.8), rgba(102, 0, 0, 0.8)),
-      url('../../../public/fondoUno.webp'); /* Asegúrate de que la ruta de la imagen sea correcta en tu proyecto React */
+      url('../../../public/fondoUno.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -52,7 +54,7 @@
     background-color: #e6e6e6;
   }
   
-  /* Estilos de la sección derecha (formulario de login) */
+  
   .right-section {
     width: 50%;
     background: black;
@@ -81,7 +83,7 @@
     max-width: 300px;
   }
   
-  input {
+  .login-input {
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #b30000;
@@ -90,10 +92,25 @@
     color: white;
   }
   
-  input::placeholder {
+  .login-input::placeholder {
     color: #ccc;
   }
   
+  .login-button {
+    padding: 10px;
+    background-color: #b30000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .login-button:hover {
+    background-color: #800000;
+  }
+  
+  /*
   button {
     padding: 10px;
     background-color: #b30000;
@@ -107,6 +124,7 @@
   button:hover {
     background-color: #800000;
   }
+  */
   
   .forgot-password {
     margin-top: 10px;

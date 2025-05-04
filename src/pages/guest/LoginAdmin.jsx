@@ -1,8 +1,8 @@
-import "./LoginAdmin.css";
-import { usuarios } from "../../services/database";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { alerta, generarToken } from "../../helpers/funciones";
+import { usuarios } from "../../services/database";
+import "./LoginAdmin.css";
 
 function LoginAdmin() {
   const [getUser, setUser] = useState("");
@@ -27,6 +27,12 @@ function LoginAdmin() {
     }
   }
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      iniciarSesion();
+    }
+  };
+
   return (
     <div className="container">
       <div className="left-section">
@@ -37,13 +43,15 @@ function LoginAdmin() {
       <div className="right-section">
         <h2>Hola De nuevo!</h2>
         <p>Ingresa tus datos</p>
-        <form id="loginForm">
+        <form id="loginForm" onSubmit={(e) => e.preventDefault()}> {}
           <input
             type="email"
             id="email"
             placeholder="Correo"
             onChange={(e) => setUser(e.target.value)}
             required
+            className="login-input"
+            onKeyPress={handleKeyPress} 
           />
           <input
             type="password"
@@ -51,8 +59,10 @@ function LoginAdmin() {
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="login-input"
+            onKeyPress={handleKeyPress} 
           />
-          <button type="button" onClick={iniciarSesion}>
+          <button type="button" onClick={iniciarSesion} className="login-button">
             Login
           </button>
         </form>
@@ -63,3 +73,7 @@ function LoginAdmin() {
 }
 
 export default LoginAdmin;
+
+
+
+
