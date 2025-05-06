@@ -5,33 +5,13 @@ import Salir from "../../assets/img/dashBoard/salir.png";
 import UserOperator from "../../assets/img/dashBoard/user-operator.webp";
 import Graf from "../../components/servicesGraf/Graf";
 import { Link } from "react-router-dom";
+import ControlPanel from "../../components/aside/ControlPanel";
+import MenuPrivate from "../../components/menu/MenuPrivate";
 
 function DashBoardOperator() {
   return (
     <>
-      <header>
-        <nav id="navBar">
-          <img id="logo" src="/logo.png" alt="Logo Quick Wash" />
-          <div>
-            <ul>
-              <li>
-                <a href="#tablaRecompensas">Recompensas</a>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  onClick={(e) => {
-                    localStorage.removeItem("token");
-                  }}
-                >
-                  Salir
-                </Link>
-              </li>
-            </ul>
-            <img id="avatarUno" src={UserOperator} alt="foto personal" />
-          </div>
-        </nav>
-      </header>
+      <MenuPrivate />
 
       <main id="mainDasboard">
         <section id="encabezado">
@@ -39,21 +19,7 @@ function DashBoardOperator() {
         </section>
 
         <section className="grid grid-cols-4 grid-rows-3 gap-4">
-          <div id="parteUno" className="row-span-5">
-            <ul>
-              <h2>Panel de Control</h2>
-              <li>
-                <img src={Auto} alt="" />
-                Ingresar Vehículo
-              </li>
-              <li>
-                <img src={Premio} alt="" /> Sistema de Recompensas
-              </li>
-              <li>
-                <img src={Salir} alt="" /> Salir
-              </li>
-            </ul>
-          </div>
+          <ControlPanel />
 
           <div id="parteDos">
             <h3>Vehículos Ingresados</h3>

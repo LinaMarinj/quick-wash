@@ -6,7 +6,7 @@ import NotFound from "../pages/guest/NotFound";
 import DashBoardAdmin from "../pages/private/DashBoardAdmin";
 import DashBoardOperator from "../pages/private/DashBoardOperator";
 import FromRegisterVehicles from "../pages/private/FormRegisterVehicles";
-import Recompensas from "../pages/guest/Recompensas";
+import Recompensas from "../pages/private/Recompensas";
 
 function AppRouter() {
   const rutas = [

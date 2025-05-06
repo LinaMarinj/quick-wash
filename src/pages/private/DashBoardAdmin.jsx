@@ -1,49 +1,12 @@
-import { Link } from "react-router-dom";
-import User from "../../assets/img/dashBoard/user.webp";
 import Graf from "../../components/servicesGraf/Graf";
-import ControlPanel from "./ControlPanel";
+import ControlPanel from "../../components/aside/ControlPanel";
+import MenuPrivate from "../../components/menu/MenuPrivate";
 import "./DashBoardAdmin.css";
 
 function DashBoardAdmin() {
   return (
     <>
-      <header>
-        <nav id="navBar">
-          <Link to="/">
-            <img
-              id="logo"
-              src="/logo.png"
-              alt="Logo Quick Wash"
-              style={{ cursor: "pointer" }}
-            />
-          </Link>
-
-          <div>
-            <ul>
-              <li>
-                <Link to="/Recompensas" href="#tablaRecompensas">
-                  Recompensas
-                </Link>
-              </li>
-              <li>
-                <a href="#tablaServicios">Servicios</a>
-              </li>
-
-              <li>
-                <Link
-                  to="/"
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                  }}
-                >
-                  Salir
-                </Link>
-              </li>
-            </ul>
-            <img id="avatarUno" src={User} alt="foto personal" />
-          </div>
-        </nav>
-      </header>
+      <MenuPrivate />
 
       <main id="mainDasboard">
         <section id="encabezado">
