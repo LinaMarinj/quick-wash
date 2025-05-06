@@ -17,12 +17,18 @@ function MenuPrivate() {
         <div>
           <ul>
             <li>
+              <Link to="/admin">Panel de Control</Link>
+            </li>
+            <li>
               <Link to="/Recompensas" href="#tablaRecompensas">
                 Recompensas
               </Link>
             </li>
+
             <li>
-              <a href="#tablaServicios">Servicios</a>
+              <Link to="/services" href="#tablaServicios">
+                Servicios
+              </Link>
             </li>
 
             <li>

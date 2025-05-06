@@ -22,7 +22,7 @@ function ControlPanel() {
           </Link>
         </li>
         <li>
-          <Link to="/admin">
+          <Link to="/services">
             <img src={Servicio} alt="" /> Servicios
           </Link>
         </li>

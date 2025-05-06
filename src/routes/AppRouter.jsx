@@ -7,6 +7,7 @@ import DashBoardAdmin from "../pages/private/DashBoardAdmin";
 import DashBoardOperator from "../pages/private/DashBoardOperator";
 import FromRegisterVehicles from "../pages/private/FormRegisterVehicles";
 import Recompensas from "../pages/private/Recompensas";
+import Services from "../pages/private/Services";
 
 function AppRouter() {
   const rutas = [
@@ -33,6 +34,10 @@ function AppRouter() {
     {
       path: "/recompensas",
       element: <RutaProtegida proteger={<Recompensas />} />,
+    },
+    {
+      path: "/services",
+      element: <RutaProtegida proteger={<Services/>} />,
     },
     {
       path: "*",

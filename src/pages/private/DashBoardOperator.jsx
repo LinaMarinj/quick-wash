@@ -1,10 +1,5 @@
 import "./DashBoardOperator.css";
-import Auto from "../../assets/img/dashBoard/auto.svg";
-import Premio from "../../assets/img/dashBoard/premio.svg";
-import Salir from "../../assets/img/dashBoard/salir.png";
-import UserOperator from "../../assets/img/dashBoard/user-operator.webp";
 import Graf from "../../components/servicesGraf/Graf";
-import { Link } from "react-router-dom";
 import ControlPanel from "../../components/aside/ControlPanel";
 import MenuPrivate from "../../components/menu/MenuPrivate";
 
