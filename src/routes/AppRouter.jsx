@@ -6,6 +6,7 @@ import NotFound from "../pages/guest/NotFound";
 import DashBoardAdmin from "../pages/private/DashBoardAdmin";
 import DashBoardOperator from "../pages/private/DashBoardOperator";
 import FromRegisterVehicles from "../pages/private/FormRegisterVehicles";
+import Recompensas from "../pages/guest/Recompensas";
 
 function AppRouter() {
   const rutas = [
@@ -27,9 +28,12 @@ function AppRouter() {
     },
     {
       path: "/registervehicles",
-      element: <FromRegisterVehicles/>,
+      element: <FromRegisterVehicles />,
     },
-    
+    {
+      path: "/recompensas",
+      element: <Recompensas />,
+    },
     {
       path: "*",
       element: <NotFound />,
@@ -39,6 +43,3 @@ function AppRouter() {
 }
 
 export default AppRouter;
-
-
-

@@ -21,7 +21,8 @@ function DashBoardAdmin() {
                 <a href="#tablaServicios">Servicios</a>
               </li>
               <li>
-                <a href="#tablaRecompensas">Recompensas</a>
+
+                <Link to="/Recompensas" href="#tablaRecompensas">Recompensas</Link>
               </li>
               <li>
                 <Link

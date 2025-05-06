@@ -1,4 +1,32 @@
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+
 function FormRegisterVehicles() {
+  const registroVehiculoExitoso = () => {
+    Swal.fire({
+      title: "Vehículo ingresado correctamente",
+      html: `
+        <div>
+          <div class="mb-4">✔️</div>
+          <p class="mb-4">
+            Visita Número: 10
+          </p>
+          <p class="font-bold mb-4">
+            Premio de Fidelización: 
+          </p>
+          <div class="mb-4">
+            Shampoo
+             <img src="/shampoo.webp" alt="Shampoo" style="width: 150px; margin: auto;" />
+          </div>
+        </div>
+      `,
+      showConfirmButton: true,
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "#e60023",
+      allowOutsideClick: false,
+    });
+  };
+
   return (
     <section className="flex flex-col items-center px-4">
       <h1 className="text-2xl font-bold mb-4">Registro de Vehículos</h1>
@@ -142,7 +170,8 @@ function FormRegisterVehicles() {
 
           <button
             className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
-            type="submit"
+            type="button"
+            onClick={registroVehiculoExitoso}
           >
             Registrar
           </button>

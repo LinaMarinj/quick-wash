@@ -17,8 +17,8 @@ function ControlPanel() {
           </Link>
         </li>
         <li>
-          <Link to="/admin">
-            <img src={Premio} alt="" /> Sistema de Recompensas
+        <Link to="/Recompensas">
+            <img src={Premio} alt="" /> Recompensas
           </Link>
         </li>
         <li>
