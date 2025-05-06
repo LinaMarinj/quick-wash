@@ -28,11 +28,11 @@ function AppRouter() {
     },
     {
       path: "/registervehicles",
-      element: <FromRegisterVehicles />,
+      element: <RutaProtegida proteger={<FromRegisterVehicles />} />,
     },
     {
       path: "/recompensas",
-      element: <Recompensas />,
+      element: <RutaProtegida proteger={<Recompensas />} />,
     },
     {
       path: "*",
