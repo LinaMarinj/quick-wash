@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function FormRegisterVehicles() {
   const registroVehiculoExitoso = () => {
@@ -161,12 +161,14 @@ function FormRegisterVehicles() {
         </p>
 
         <div className="flex justify-center gap-2 mt-2">
-          <button
-            className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
-            type="button"
-          >
-            Cancelar
-          </button>
+          <Link to="/admin">
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
+              type="button"
+            >
+              Cancelar
+            </button>
+          </Link>
 
           <button
             className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
