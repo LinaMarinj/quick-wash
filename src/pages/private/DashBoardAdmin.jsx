@@ -1,15 +1,20 @@
-import "./DashBoardAdmin.css";
+import { Link } from "react-router-dom";
 import User from "../../assets/img/dashBoard/user.webp";
 import Graf from "../../components/servicesGraf/Graf";
 import ControlPanel from "./ControlPanel";
-import { Link } from "react-router-dom";
+import "./DashBoardAdmin.css";
 
 function DashBoardAdmin() {
   return (
     <>
       <header>
         <nav id="navBar">
-          <img id="logo" src="/logo.png" alt="Logo Quick Wash" />
+          
+
+          <Link to="/">
+  <img id="logo" src="/logo.png" alt="Logo Quick Wash" style={{ cursor: "pointer" }} />
+</Link>
+
           <div>
             <ul>
               <li>
@@ -21,7 +26,7 @@ function DashBoardAdmin() {
               <li>
                 <Link
                   to="/"
-                  onClick={(e) => {
+                  onClick={() => {
                     localStorage.removeItem("token");
                   }}
                 >
@@ -64,7 +69,7 @@ function DashBoardAdmin() {
             <p>En total</p>
           </div>
 
-          <div id="parteCinco" class="row-span-3 col-start-2 row-start-2">
+          <div id="parteCinco" className="row-span-3 col-start-2 row-start-2">
             <p> Resumen de Servicios Realizados</p>
             <Graf />
           </div>

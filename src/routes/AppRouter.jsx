@@ -1,12 +1,11 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import RutaProtegida from "../components/RutaProtegida";
 import Home from "../pages/guest/home";
+import LoginAdmin from "../pages/guest/LoginAdmin";
+import NotFound from "../pages/guest/NotFound";
 import DashBoardAdmin from "../pages/private/DashBoardAdmin";
 import DashBoardOperator from "../pages/private/DashBoardOperator";
-import NotFound from "../pages/guest/NotFound";
-import { createBrowserRouter } from "react-router-dom";
-import { RouterProvider } from "react-router-dom";
 import FromRegisterVehicles from "../pages/private/FormRegisterVehicles";
-import LoginAdmin from "../pages/guest/LoginAdmin";
-import RutaProtegida from "../components/RutaProtegida";
 
 function AppRouter() {
   const rutas = [
@@ -40,3 +39,6 @@ function AppRouter() {
 }
 
 export default AppRouter;
+
+
+
