@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
 
 function FormRegisterVehicles() {
+//utilizar hooks useEfect para llamar con fecht los datos de tipovehicle,  marcas y servicios
+
+
   const registroVehiculoExitoso = () => {
     Swal.fire({
       title: "Vehículo ingresado correctamente",

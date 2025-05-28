@@ -11,21 +11,69 @@ function LoginAdmin() {
   let redireccion = useNavigate();
 
   function buscarUsuario() {
-    let usuario = usuarios.find(
-      (item) => getUser === item.correo && getPassword === item.contrasena
-    );
-    return usuario;
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      email: getUser,
+      password: getPassword,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    return fetch("http://localhost:8081/api/auth/login", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+      })
+      .then((data) => {
+        const accessToken = data.accessToken;
+        if (accessToken) {
+          const user = {
+            accessToken: accessToken,
+          };
+          return user;
+        } else {
+          console.error(
+            "El accessToken no se encontró en la respuesta de la API:",
+            data
+          );
+          throw new Error(
+            "El accessToken no se encontró en la respuesta de la API."
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        throw error;
+      });
   }
 
   function iniciarSesion() {
-    if (buscarUsuario()) {
-      let tokenAcceso = generarToken();
-      localStorage.setItem("token", tokenAcceso);
-      alerta("Bienvenido", "Acceso al sistema", "success");
-      redireccion("/admin");
-    } else {
-      alerta("Error", "Error de credenciales", "error");
-    }
+    buscarUsuario()
+      .then((user) => {
+        debugger;
+        if (user && user.accessToken) {
+          let tokenAcceso = generarToken();
+          localStorage.setItem("token", tokenAcceso);
+          alerta("Bienvenido", "Acceso al sistema", "success");
+          redireccion("/admin");
+        } else {
+          alerta("Error", "Error al obtener el token de acceso", "error");
+        }
+      })
+      .catch((error) => {
+        debugger;
+        alerta("Error", "Error de credenciales", "error");
+      });
   }
 
   const handleKeyPress = (event) => {
