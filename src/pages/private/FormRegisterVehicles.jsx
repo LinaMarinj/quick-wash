@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-const apiService = "https://api.example.com/envios/"; // lina remplaza esta con la api real
+const apiService = "https://api/services/{id}"; 
 function FormRegisterVehicles() {
   const [Lavado, getLavado] = useState("");
   const [LavadoChasis, getChasis] = useState("");
