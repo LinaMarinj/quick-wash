@@ -1,10 +1,60 @@
+import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
 
 function FormRegisterVehicles() {
-//utilizar hooks useEfect para llamar con fecht los datos de tipovehicle,  marcas y servicios
+  const [placa, setPlaca] = useState("");
+  const [marcas, setMarcas] = useState([]);
+  const [marcaSeleccionada, setMarcaSeleccionada] = useState("");
+  const [colores, setColores] = useState([]); // Puedes cargar colores desde la API si lo deseas
+  const [colorSeleccionado, setColorSeleccionado] = useState("");
+  const [tiposVehiculo, setTiposVehiculo] = useState([]);
+  const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState("");
+  
+  const [servicios, setServicios] = useState([]);
+  const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
+  const [fechaServicio, setFechaServicio] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // URLs de la API (¡Reemplaza con tus URLs reales!)
+  const API_URL_MARCAS = "TU_URL_DE_LA_API/marcas";
+  const API_URL_TIPOS_VEHICULO = "TU_URL_DE_LA_API/tipos-vehiculo";
+  const API_URL_SERVICIOS = "TU_URL_DE_LA_API/servicios";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [marcasRes, tiposRes, serviciosRes] = await Promise.all([
+          fetch(API_URL_MARCAS),
+          fetch(API_URL_TIPOS_VEHICULO),
+          fetch(API_URL_SERVICIOS),
+        ]);
+
+        if (!marcasRes.ok || !tiposRes.ok || !serviciosRes.ok) {
+          throw new Error(
+            `Error al cargar datos: ${marcasRes.status} ${tiposRes.status} ${serviciosRes.status}`
+          );
+        }
+
+        const marcasData = await marcasRes.json();
+        const tiposData = await tiposRes.json();
+        const serviciosData = await serviciosRes.json();
+
+        setMarcas(marcasData);
+        setTiposVehiculo(tiposData);
+        setServicios(serviciosData);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   const registroVehiculoExitoso = () => {
     Swal.fire({
@@ -16,11 +66,11 @@ function FormRegisterVehicles() {
             Visita Número: 10
           </p>
           <p class="font-bold mb-4">
-            Premio de Fidelización: 
+            Premio de Fidelización:
           </p>
           <div class="mb-4">
             Shampoo
-             <img src="/shampoo.webp" alt="Shampoo" style="width: 150px; margin: auto;" />
+              <img src="/shampoo.webp" alt="Shampoo" style="width: 150px; margin: auto;" />
           </div>
         </div>
       `,
@@ -31,14 +81,50 @@ function FormRegisterVehicles() {
     });
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Aquí podrías enviar los datos del formulario, incluyendo marcaSeleccionada,
+    // tipoVehiculoSeleccionado y serviciosSeleccionados
+    console.log({
+      placa,
+      marca: marcaSeleccionada,
+      color: colorSeleccionado,
+      tipo: tipoVehiculoSeleccionado,
+      nombre: nombreCliente,
+      apellido: apellidoCliente,
+      telefono: telefonoCliente,
+      correo: correoCliente,
+      servicios: serviciosSeleccionados,
+      fecha: fechaServicio,
+    });
+    registroVehiculoExitoso();
+    // También podrías resetear el formulario aquí si es necesario
+  };
+
+  const handleServicioChange = (servicioId) => {
+    if (serviciosSeleccionados.includes(servicioId)) {
+      setServiciosSeleccionados(serviciosSeleccionados.filter((id) => id !== servicioId));
+    } else {
+      setServiciosSeleccionados([...serviciosSeleccionados, servicioId]);
+    }
+  };
+
+  if (loading) {
+    return <div>Cargando datos...</div>;
+  }
+
+  if (error) {
+    return <div>Error al cargar los datos: {error}</div>;
+  }
+
   return (
     <>
       <MenuPrivate />
-      
+
       <section className="flex flex-col items-center px-4 mt-5 mb-5">
         <h1 className="text-2xl font-bold mb-4">Registro de Vehículos</h1>
 
-        <form className="w-full max-w-sm space-y-2">
+        <form className="w-full max-w-sm space-y-2" onSubmit={handleSubmit}>
           <div className="flex gap-2">
             <div className="w-1/2">
               <label className="block text-sm font-medium mb-1">Placa</label>
@@ -47,6 +133,8 @@ function FormRegisterVehicles() {
                 type="text"
                 name="placa"
                 className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                value={placa}
+                onChange={(e) => setPlaca(e.target.value)}
               />
             </div>
 
@@ -55,21 +143,15 @@ function FormRegisterVehicles() {
               <select
                 id="marcas"
                 className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                value={marcaSeleccionada}
+                onChange={(e) => setMarcaSeleccionada(e.target.value)}
               >
                 <option value="">Seleccione</option>
-                <option value="toyota">Toyota</option>
-                <option value="nissan">Nissan</option>
-                <option value="mazda">Mazda</option>
-                <option value="renault">Renault</option>
-                <option value="hyundai">Hyundai</option>
-                <option value="kia">Kia</option>
-                <option value="chevrolet">Chevrolet</option>
-                <option value="ford">Ford</option>
-                <option value="honda">Honda</option>
-                <option value="volkswagen">Volkswagen</option>
-                <option value="bmw">BMW</option>
-                <option value="mercedes-benz">Mercedes-Benz</option>
-                <option value="audi">Audi</option>
+                {marcas.map((marca) => (
+                  <option key={marca.id} value={marca.nombre}>
+                    {marca.nombre}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -82,20 +164,24 @@ function FormRegisterVehicles() {
                 type="text"
                 name="color"
                 className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                value={colorSeleccionado}
+                onChange={(e) => setColorSeleccionado(e.target.value)}
               />
             </div>
             <div className="w-1/2">
               <label className="block text-sm font-medium mb-1">Tipo</label>
               <select
-                id="marcas"
+                id="tipo"
                 className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                value={tipoVehiculoSeleccionado}
+                onChange={(e) => setTipoVehiculoSeleccionado(e.target.value)}
               >
                 <option value="">Seleccione</option>
-                <option value="automovil">Automóvil</option>
-                <option value="camioneta">Camioneta</option>
-                <option value="pickup">Pickup</option>
-                <option value="convertible">Convertible</option>
-                <option value="Otro">Otro</option>
+                {tiposVehiculo.map((tipo) => (
+                  <option key={tipo.id} value={tipo.nombre}>
+                    {tipo.nombre}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -111,6 +197,8 @@ function FormRegisterVehicles() {
               name="nombre"
               placeholder="Nombre"
               className="w-1/2 border bg-gray-50 border-gray-300 rounded px-2 py-1"
+              value={nombreCliente}
+              onChange={(e) => setNombreCliente(e.target.value)}
             />
             <input
               required
@@ -118,6 +206,8 @@ function FormRegisterVehicles() {
               name="apellido"
               placeholder="Apellido"
               className="w-1/2 border bg-gray-50 border-gray-300 rounded px-2 py-1"
+              value={apellidoCliente}
+              onChange={(e) => setApellidoCliente(e.target.value)}
             />
           </div>
 
@@ -128,6 +218,8 @@ function FormRegisterVehicles() {
               name="telefono"
               placeholder="Teléfono"
               className="w-1/2 border bg-gray-50 border-gray-300 rounded px-2 py-1"
+              value={telefonoCliente}
+              onChange={(e) => setTelefonoCliente(e.target.value)}
             />
             <input
               required
@@ -135,6 +227,8 @@ function FormRegisterVehicles() {
               name="correo"
               placeholder="Correo"
               className="w-1/2 border bg-gray-50 border-gray-300 rounded px-2 py-1"
+              value={correoCliente}
+              onChange={(e) => setCorreoCliente(e.target.value)}
             />
           </div>
 
@@ -143,16 +237,16 @@ function FormRegisterVehicles() {
           </h2>
 
           <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-            {[
-              "Lavado sencillo",
-              "Lavado de chasis",
-              "Lavado full",
-              "Brillada",
-              "Lavado de motor",
-            ].map((servicio, idx) => (
-              <label key={idx} className="flex items-center text-sm">
-                <input type="checkbox" className="mr-2 h-4 w-4 text-red-500" />
-                {servicio}
+            {servicios.map((servicio) => (
+              <label key={servicio.id} className="flex items-center text-sm">
+                <input
+                  type="checkbox"
+                  className="mr-2 h-4 w-4 text-red-500"
+                  value={servicio.id}
+                  checked={serviciosSeleccionados.includes(servicio.id)}
+                  onChange={() => handleServicioChange(servicio.id)}
+                />
+                {servicio.nombre}
               </label>
             ))}
           </div>
@@ -162,6 +256,8 @@ function FormRegisterVehicles() {
             <input
               type="date"
               className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+              value={fechaServicio}
+              onChange={(e) => setFechaServicio(e.target.value)}
             />
           </div>
 
@@ -181,8 +277,7 @@ function FormRegisterVehicles() {
 
             <button
               className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
-              type="button"
-              onClick={registroVehiculoExitoso}
+              type="submit"
             >
               Registrar
             </button>
