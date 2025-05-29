@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
 
 function FormRegisterVehicles() {
+  const [envio, setEnvio] = useState("");
+  const [producto, setProducto] = useState("");
+  const [destino, setDestino] = useState("");
+  let redireccion = useNavigate();
+  let { id } = useParams();
   const registroVehiculoExitoso = () => {
     Swal.fire({
       title: "Vehículo ingresado correctamente",
