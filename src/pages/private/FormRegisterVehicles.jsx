@@ -1,11 +1,38 @@
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
-
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+const apiService = "https://api.example.com/envios/"; // lina remplaza esta con la api real
 function FormRegisterVehicles() {
-  const [envio, setEnvio] = useState("");
-  const [producto, setProducto] = useState("");
-  const [destino, setDestino] = useState("");
+  const [Lavado, getLavado] = useState("");
+  const [LavadoChasis, getChasis] = useState("");
+  const [LavadoFull, getFull] = useState("");
+  const [Brillada, getBrillada] = useState("");
+  const [LavadoMotor, getmotor] = useState("");
+  const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
+
+  const servicios = [
+    "Lavado sencillo",
+    "Lavado de chasis",
+    "Lavado full",
+    "Brillada",
+    "Lavado de motor",
+  ];
+
+  function getService() {
+    fetch(apiService )
+      .then((response) => response.json())
+      .then((data) => {
+        getLavado(data.Lavado);
+        getChasis(data.LavadoChasis);
+        getFull(data.LavadoFull);
+        getBrillada(data.Brillada);
+        getmotor(data.LavadoMotor);
+      })
+      .catch((error) => console.log(error));
+  }
+
   let redireccion = useNavigate();
   let { id } = useParams();
   const registroVehiculoExitoso = () => {
@@ -31,6 +58,15 @@ function FormRegisterVehicles() {
       confirmButtonColor: "#e60023",
       allowOutsideClick: false,
     });
+  };
+
+  const handleServicioChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setServiciosSeleccionados([...serviciosSeleccionados, value]);
+    } else {
+      setServiciosSeleccionados(serviciosSeleccionados.filter(s => s !== value));
+    }
   };
 
   return (
@@ -145,15 +181,15 @@ function FormRegisterVehicles() {
           </h2>
 
           <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-            {[
-              "Lavado sencillo",
-              "Lavado de chasis",
-              "Lavado full",
-              "Brillada",
-              "Lavado de motor",
-            ].map((servicio, idx) => (
+            {servicios.map((servicio, idx) => (
               <label key={idx} className="flex items-center text-sm">
-                <input type="checkbox" className="mr-2 h-4 w-4 text-red-500" />
+                <input
+                  type="checkbox"
+                  className="mr-2 h-4 w-4 text-red-500"
+                  value={servicio}
+                  checked={serviciosSeleccionados.includes(servicio)}
+                  onChange={handleServicioChange}
+                />
                 {servicio}
               </label>
             ))}
