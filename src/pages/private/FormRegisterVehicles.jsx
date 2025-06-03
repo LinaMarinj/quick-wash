@@ -20,31 +20,45 @@ function FormRegisterVehicles() {
 
   // URLs de la API (¡Reemplaza con tus URLs reales!)
   const API_URL_MARCAS = "TU_URL_DE_LA_API/marcas";
-  const API_URL_TIPOS_VEHICULO = "TU_URL_DE_LA_API/tipos-vehiculo";
+  const API_URL_TIPOS_VEHICULO = "http://localhost:8081/api/typevehicles"; //poisble URL de API Local 
   const API_URL_SERVICIOS = "TU_URL_DE_LA_API/servicios";
 
+  function buscarTiposVehiculo() { // Función de  busueda de tipos de vehículo
+  return fetch(API_URL_TIPOS_VEHICULO)
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(`Error al cargar tipos de vehículo: ${response.status}`);
+      }
+    })
+    .then((data) => {
+      setTiposVehiculo(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      setError(error.message);
+    });
+}
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const [marcasRes, tiposRes, serviciosRes] = await Promise.all([
           fetch(API_URL_MARCAS),
-          fetch(API_URL_TIPOS_VEHICULO),
           fetch(API_URL_SERVICIOS),
         ]);
 
-        if (!marcasRes.ok || !tiposRes.ok || !serviciosRes.ok) {
+        if (!marcasRes.ok || !serviciosRes.ok) {
           throw new Error(
-            `Error al cargar datos: ${marcasRes.status} ${tiposRes.status} ${serviciosRes.status}`
+            `Error al cargar datos: ${marcasRes.status} ${serviciosRes.status}`
           );
         }
 
         const marcasData = await marcasRes.json();
-        const tiposData = await tiposRes.json();
         const serviciosData = await serviciosRes.json();
 
         setMarcas(marcasData);
-        setTiposVehiculo(tiposData);
         setServicios(serviciosData);
         setLoading(false);
       } catch (err) {
@@ -54,6 +68,7 @@ function FormRegisterVehicles() {
     };
 
     fetchData();
+    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehículo
   }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   const registroVehiculoExitoso = () => {
