@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
-const apiService = "https://api/services/{id}"; 
+const apiService = "https://api/services/{id}";
 function FormRegisterVehicles() {
   const [placa, setPlaca] = useState("");
   const [marcas, setMarcas] = useState([]);
@@ -11,41 +11,79 @@ function FormRegisterVehicles() {
   const [colorSeleccionado, setColorSeleccionado] = useState("");
   const [tiposVehiculo, setTiposVehiculo] = useState([]);
   const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState("");
-  
+
   const [servicios, setServicios] = useState([]);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
   const [fechaServicio, setFechaServicio] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(undefined);
+  const [nombreCliente, setNombreCliente] = useState("");
+  const [apellidoCliente, setApellidoCliente] = useState("");
+  const [telefonoCliente, setTelefonoCliente] = useState("");
+  const [correoCliente, setCorreoCliente] = useState("");
+  
+  
 
   // URLs de la API (¡Reemplaza con tus URLs reales!)
   const API_URL_MARCAS = "TU_URL_DE_LA_API/marcas";
-  const API_URL_TIPOS_VEHICULO = "TU_URL_DE_LA_API/tipos-vehiculo";
+  const API_URL_TIPOS_VEHICULO = "http://localhost:8081/api/typevehicles"; //poisble URL de API Local
   const API_URL_SERVICIOS = "TU_URL_DE_LA_API/servicios";
 
+  const myHeaders = new Headers();
+  myHeaders.append("Accept", "*/*");
+
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append(
+    "Authorization",
+    "Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXJpYWdvbWV6QGdtYWlsLmNvbSIsImlhdCI6MTc0ODk4NDI4NiwiZXhwIjoxNzQ5MDcwNjg2fQ.HXH9miWY9ZnFdxzhW-ryprVfqRppx0B-44V4RTxoFqFbNM8EcD79DSOQcjJJszUh"
+  );
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  function buscarTiposVehiculo() {
+    // Función de  busueda de tipos de vehículo
+    return fetch(API_URL_TIPOS_VEHICULO, requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(
+            `Error al cargar tipos de vehículo: ${response.status}`
+          );
+        }
+      })
+      .then((data) => {
+        setTiposVehiculo(data);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(error.message);
+      });
+  }
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const [marcasRes, tiposRes, serviciosRes] = await Promise.all([
           fetch(API_URL_MARCAS),
-          fetch(API_URL_TIPOS_VEHICULO),
           fetch(API_URL_SERVICIOS),
         ]);
 
-        if (!marcasRes.ok || !tiposRes.ok || !serviciosRes.ok) {
+        /*if (!marcasRes.ok || !serviciosRes.ok) {
           throw new Error(
-            `Error al cargar datos: ${marcasRes.status} ${tiposRes.status} ${serviciosRes.status}`
+            `Error al cargar datos: ${marcasRes.status} ${serviciosRes.status}`
           );
         }
 
         const marcasData = await marcasRes.json();
-        const tiposData = await tiposRes.json();
         const serviciosData = await serviciosRes.json();
 
         setMarcas(marcasData);
-        setTiposVehiculo(tiposData);
-        setServicios(serviciosData);
+        setServicios(serviciosData);*/
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -54,6 +92,7 @@ function FormRegisterVehicles() {
     };
 
     fetchData();
+    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehículo
   }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   const registroVehiculoExitoso = () => {
@@ -103,7 +142,9 @@ function FormRegisterVehicles() {
 
   const handleServicioChange = (servicioId) => {
     if (serviciosSeleccionados.includes(servicioId)) {
-      setServiciosSeleccionados(serviciosSeleccionados.filter((id) => id !== servicioId));
+      setServiciosSeleccionados(
+        serviciosSeleccionados.filter((id) => id !== servicioId)
+      );
     } else {
       setServiciosSeleccionados([...serviciosSeleccionados, servicioId]);
     }
@@ -178,8 +219,8 @@ function FormRegisterVehicles() {
               >
                 <option value="">Seleccione</option>
                 {tiposVehiculo.map((tipo) => (
-                  <option key={tipo.id} value={tipo.nombre}>
-                    {tipo.nombre}
+                  <option key={tipo.id} value={tipo.name}>
+                    {tipo.name}
                   </option>
                 ))}
               </select>
