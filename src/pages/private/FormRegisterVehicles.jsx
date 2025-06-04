@@ -12,6 +12,7 @@ function FormRegisterVehicles() {
   const [tiposVehiculo, setTiposVehiculo] = useState([]);
   const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState("");
 
+  // Mantén los servicios quemados (no uses setServicios)
   const [servicios] = useState([
     { id: 1, nombre: "Lavado Sencillo" },
     { id: 2, nombre: "Lavado de Chasis" },
@@ -289,7 +290,7 @@ function FormRegisterVehicles() {
           </div>
 
           <p className="text-gray-500 text-xs italic text-center">
-            Ingrese todos los datos correctamenterese todos los datos correctamente
+            Ingrese todos los datos correctamente
           </p>
 
           <div className="flex justify-center gap-2 mt-2">
