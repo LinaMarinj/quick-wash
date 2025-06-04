@@ -2,17 +2,23 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
-const apiService = "https://api/services/{id}";
+
 function FormRegisterVehicles() {
   const [placa, setPlaca] = useState("");
   const [marcas, setMarcas] = useState([]);
   const [marcaSeleccionada, setMarcaSeleccionada] = useState("");
-  const [colores, setColores] = useState([]); // Puedes cargar colores desde la API si lo deseas
+  const [colores, setColores] = useState([]);
   const [colorSeleccionado, setColorSeleccionado] = useState("");
   const [tiposVehiculo, setTiposVehiculo] = useState([]);
   const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState("");
 
-  const [servicios, setServicios] = useState([]);
+  const [servicios] = useState([
+    { id: 1, nombre: "Lavado Sencillo" },
+    { id: 2, nombre: "Lavado de Chasis" },
+    { id: 3, nombre: "Lavado Full" },
+    { id: 4, nombre: "Brillada" },
+    { id: 5, nombre: "Lavado Motor" },
+  ]);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
   const [fechaServicio, setFechaServicio] = useState("");
   const [loading, setLoading] = useState(true);
@@ -21,17 +27,12 @@ function FormRegisterVehicles() {
   const [apellidoCliente, setApellidoCliente] = useState("");
   const [telefonoCliente, setTelefonoCliente] = useState("");
   const [correoCliente, setCorreoCliente] = useState("");
-  
-  
 
-  // URLs de la API (¡Reemplaza con tus URLs reales!)
   const API_URL_MARCAS = "TU_URL_DE_LA_API/marcas";
-  const API_URL_TIPOS_VEHICULO = "http://localhost:8081/api/typevehicles"; //poisble URL de API Local
-  const API_URL_SERVICIOS = "TU_URL_DE_LA_API/servicios";
+  const API_URL_TIPOS_VEHICULO = "http://localhost:8081/api/typevehicles";
 
   const myHeaders = new Headers();
   myHeaders.append("Accept", "*/*");
-
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append(
     "Authorization",
@@ -45,7 +46,6 @@ function FormRegisterVehicles() {
   };
 
   function buscarTiposVehiculo() {
-    // Función de  busueda de tipos de vehículo
     return fetch(API_URL_TIPOS_VEHICULO, requestOptions)
       .then((response) => {
         if (response.ok) {
@@ -60,30 +60,19 @@ function FormRegisterVehicles() {
         setTiposVehiculo(data);
       })
       .catch((error) => {
-        console.error(error);
         setError(error.message);
       });
   }
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [marcasRes, tiposRes, serviciosRes] = await Promise.all([
-          fetch(API_URL_MARCAS),
-          fetch(API_URL_SERVICIOS),
-        ]);
-
-        /*if (!marcasRes.ok || !serviciosRes.ok) {
-          throw new Error(
-            `Error al cargar datos: ${marcasRes.status} ${serviciosRes.status}`
-          );
+        const marcasRes = await fetch(API_URL_MARCAS);
+        if (marcasRes.ok) {
+          const marcasData = await marcasRes.json();
+          setMarcas(marcasData);
         }
-
-        const marcasData = await marcasRes.json();
-        const serviciosData = await serviciosRes.json();
-
-        setMarcas(marcasData);
-        setServicios(serviciosData);*/
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -92,8 +81,8 @@ function FormRegisterVehicles() {
     };
 
     fetchData();
-    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehículo
-  }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
+    buscarTiposVehiculo();
+  }, []);
 
   const registroVehiculoExitoso = () => {
     Swal.fire({
@@ -122,8 +111,6 @@ function FormRegisterVehicles() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Aquí podrías enviar los datos del formulario, incluyendo marcaSeleccionada,
-    // tipoVehiculoSeleccionado y serviciosSeleccionados
     console.log({
       placa,
       marca: marcaSeleccionada,
@@ -137,7 +124,6 @@ function FormRegisterVehicles() {
       fecha: fechaServicio,
     });
     registroVehiculoExitoso();
-    // También podrías resetear el formulario aquí si es necesario
   };
 
   const handleServicioChange = (servicioId) => {
@@ -303,7 +289,7 @@ function FormRegisterVehicles() {
           </div>
 
           <p className="text-gray-500 text-xs italic text-center">
-            Ingrese todos los datos correctamente
+            Ingrese todos los datos correctamenterese todos los datos correctamente
           </p>
 
           <div className="flex justify-center gap-2 mt-2">
