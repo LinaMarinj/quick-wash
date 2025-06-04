@@ -23,38 +23,55 @@ function FormRegisterVehicles() {
   const API_URL_TIPOS_VEHICULO = "TU_URL_DE_LA_API/tipos-vehiculo";
   const API_URL_SERVICIOS = "TU_URL_DE_LA_API/servicios";
 
+  // Opciones para fetch (puedes personalizar según tu API)
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    const buscarMarcas = async () => {
       try {
-        const [marcasRes, tiposRes, serviciosRes] = await Promise.all([
-          fetch(API_URL_MARCAS),
-          fetch(API_URL_TIPOS_VEHICULO),
-          fetch(API_URL_SERVICIOS),
-        ]);
-
-        if (!marcasRes.ok || !tiposRes.ok || !serviciosRes.ok) {
-          throw new Error(
-            `Error al cargar datos: ${marcasRes.status} ${tiposRes.status} ${serviciosRes.status}`
-          );
+        const response = await fetch(API_URL_MARCAS, requestOptions);
+        if (!response.ok) {
+          throw new Error(`Error al cargar marcas: ${response.status}`);
         }
-
-        const marcasData = await marcasRes.json();
-        const tiposData = await tiposRes.json();
-        const serviciosData = await serviciosRes.json();
-
-        setMarcas(marcasData);
-        setTiposVehiculo(tiposData);
-        setServicios(serviciosData);
-        setLoading(false);
+        const data = await response.json();
+        setMarcas(data);
       } catch (err) {
         setError(err.message);
-        setLoading(false);
       }
     };
 
-    fetchData();
-  }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
+    const buscarTiposVehiculo = async () => {
+      try {
+        const response = await fetch(API_URL_TIPOS_VEHICULO, requestOptions);
+        if (!response.ok) {
+          throw new Error(`Error al cargar tipos de vehículo: ${response.status}`);
+        }
+        const data = await response.json();
+        setTiposVehiculo(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    useEffect(() => {
+      const cargarDatos = async () => {
+        try {
+          await buscarMarcas();
+          await buscarTiposVehiculo();
+          
+        } finally {
+          setLoading(false);
+        }
+      };
+      cargarDatos();
+    }, []);
+
+    buscarMarcas();
+    buscarTiposVehiculo(); 
+  }, []); 
 
   const registroVehiculoExitoso = () => {
     Swal.fire({
