@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
-const apiService = "https://api/services/{id}";
 function FormRegisterVehicles() {
   const [placa, setPlaca] = useState("");
   const [marcas, setMarcas] = useState([]);
@@ -178,12 +177,11 @@ function FormRegisterVehicles() {
   };
 
   const handleServicioChange = (servicioId) => {
-    if (serviciosSeleccionados.includes(servicioId)) {
-      setServiciosSeleccionados(
-        serviciosSeleccionados.filter((id) => id !== servicioId)
-      );
+    const id = Number(servicioId);
+    if (serviciosSeleccionados.includes(id)) {
+      setServiciosSeleccionados(serviciosSeleccionados.filter((sid) => sid !== id));
     } else {
-      setServiciosSeleccionados([...serviciosSeleccionados, servicioId]);
+      setServiciosSeleccionados([...serviciosSeleccionados, id]);
     }
   };
 
