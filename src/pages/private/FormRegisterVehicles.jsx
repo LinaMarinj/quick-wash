@@ -21,8 +21,6 @@ function FormRegisterVehicles() {
   const [apellidoCliente, setApellidoCliente] = useState("");
   const [telefonoCliente, setTelefonoCliente] = useState("");
   const [correoCliente, setCorreoCliente] = useState("");
-  
-  
 
   // URLs de la API (¡Reemplaza con tus URLs reales!)
   const API_URL_MARCAS = "TU_URL_DE_LA_API/marcas";
@@ -33,10 +31,7 @@ function FormRegisterVehicles() {
   myHeaders.append("Accept", "*/*");
 
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Authorization",
-    "Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXJpYWdvbWV6QGdtYWlsLmNvbSIsImlhdCI6MTc0ODk4NDI4NiwiZXhwIjoxNzQ5MDcwNjg2fQ.HXH9miWY9ZnFdxzhW-ryprVfqRppx0B-44V4RTxoFqFbNM8EcD79DSOQcjJJszUh"
-  );
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
   const requestOptions = {
     method: "GET",
@@ -58,6 +53,25 @@ function FormRegisterVehicles() {
       })
       .then((data) => {
         setTiposVehiculo(data);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(error.message);
+      });
+  }
+
+  function buscarMarcas() {
+    // Función de  busueda de tipos de vehículo
+    return fetch("http://localhost:8081/api/brands", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(`Error al cargar las marcas: ${response.status}`);
+        }
+      })
+      .then((data) => {
+        setMarcas(data);
       })
       .catch((error) => {
         console.error(error);
@@ -92,7 +106,9 @@ function FormRegisterVehicles() {
     };
 
     fetchData();
-    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehículo
+    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehí
+    // culo
+    buscarMarcas();
   }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   const registroVehiculoExitoso = () => {
@@ -137,7 +153,6 @@ function FormRegisterVehicles() {
       fecha: fechaServicio,
     });
     registroVehiculoExitoso();
-    // También podrías resetear el formulario aquí si es necesario
   };
 
   const handleServicioChange = (servicioId) => {
@@ -189,8 +204,8 @@ function FormRegisterVehicles() {
               >
                 <option value="">Seleccione</option>
                 {marcas.map((marca) => (
-                  <option key={marca.id} value={marca.nombre}>
-                    {marca.nombre}
+                  <option key={marca.id} value={marca.name}>
+                    {marca.name}
                   </option>
                 ))}
               </select>
