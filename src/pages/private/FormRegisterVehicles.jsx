@@ -2,23 +2,21 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
-
+const apiService = "https://api/services/{id}";
 function FormRegisterVehicles() {
   const [placa, setPlaca] = useState("");
   const [marcas, setMarcas] = useState([]);
   const [marcaSeleccionada, setMarcaSeleccionada] = useState("");
-  const [colores, setColores] = useState([]);
+  const [colores, setColores] = useState([]); // Puedes cargar colores desde la API si lo deseas
   const [colorSeleccionado, setColorSeleccionado] = useState("");
   const [tiposVehiculo, setTiposVehiculo] = useState([]);
   const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState("");
 
-  // Mantén los servicios quemados (no uses setServicios)
-  const [servicios] = useState([
-    { id: 1, nombre: "Lavado Sencillo" },
-    { id: 2, nombre: "Lavado de Chasis" },
-    { id: 3, nombre: "Lavado Full" },
-    { id: 4, nombre: "Brillada" },
-    { id: 5, nombre: "Lavado Motor" },
+  const [servicios, setServicios] = useState([
+    { id: 1, nombre: "Lavado Básico" },
+    { id: 2, nombre: "Lavado Premium" },
+    { id: 3, nombre: "Encerado" },
+    { id: 4, nombre: "Aspirado" },
   ]);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
   const [fechaServicio, setFechaServicio] = useState("");
@@ -28,15 +26,15 @@ function FormRegisterVehicles() {
   const [apellidoCliente, setApellidoCliente] = useState("");
   const [telefonoCliente, setTelefonoCliente] = useState("");
   const [correoCliente, setCorreoCliente] = useState("");
-  
-  
 
   // URLs de la API (¡Reemplaza con tus URLs reales!)
   const API_URL_MARCAS = "TU_URL_DE_LA_API/marcas";
-  const API_URL_TIPOS_VEHICULO = "http://localhost:8081/api/typevehicles";
+  const API_URL_TIPOS_VEHICULO = "http://localhost:8081/api/typevehicles"; //poisble URL de API Local
+  const API_URL_SERVICIOS = "TU_URL_DE_LA_API/servicios";
 
   const myHeaders = new Headers();
   myHeaders.append("Accept", "*/*");
+
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -47,6 +45,7 @@ function FormRegisterVehicles() {
   };
 
   function buscarTiposVehiculo() {
+    // Función de  busueda de tipos de vehículo
     return fetch(API_URL_TIPOS_VEHICULO, requestOptions)
       .then((response) => {
         if (response.ok) {
@@ -61,6 +60,26 @@ function FormRegisterVehicles() {
         setTiposVehiculo(data);
       })
       .catch((error) => {
+        console.error(error);
+        setError(error.message);
+      });
+  }
+
+  function buscarMarcas() {
+    // Función de  busueda de tipos de vehículo
+    return fetch("http://localhost:8081/api/brands", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(`Error al cargar las marcas: ${response.status}`);
+        }
+      })
+      .then((data) => {
+        setMarcas(data);
+      })
+      .catch((error) => {
+        console.error(error);
         setError(error.message);
       });
   }
@@ -68,11 +87,22 @@ function FormRegisterVehicles() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const marcasRes = await fetch(API_URL_MARCAS);
-        if (marcasRes.ok) {
-          const marcasData = await marcasRes.json();
-          setMarcas(marcasData);
+        const [marcasRes, tiposRes, serviciosRes] = await Promise.all([
+          fetch(API_URL_MARCAS),
+          fetch(API_URL_SERVICIOS),
+        ]);
+
+        /*if (!marcasRes.ok || !serviciosRes.ok) {
+          throw new Error(
+            `Error al cargar datos: ${marcasRes.status} ${serviciosRes.status}`
+          );
         }
+
+        const marcasData = await marcasRes.json();
+        const serviciosData = await serviciosRes.json();
+
+        setMarcas(marcasData);
+        setServicios(serviciosData);*/
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -81,7 +111,9 @@ function FormRegisterVehicles() {
     };
 
     fetchData();
-    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehículo
+    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehí
+    // culo
+    buscarMarcas();
   }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   const registroVehiculoExitoso = () => {
@@ -111,7 +143,8 @@ function FormRegisterVehicles() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log({
+
+    const datos = {
       placa,
       marca: marcaSeleccionada,
       color: colorSeleccionado,
@@ -122,8 +155,26 @@ function FormRegisterVehicles() {
       correo: correoCliente,
       servicios: serviciosSeleccionados,
       fecha: fechaServicio,
-    });
-    registroVehiculoExitoso();
+    };
+
+    fetch("https://api/services/{id}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify(datos),
+    })
+      .then((response) => {
+        if (response.ok) {
+          registroVehiculoExitoso();
+        } else {
+          throw new Error("Error al registrar el vehículo");
+        }
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   };
 
   const handleServicioChange = (servicioId) => {
