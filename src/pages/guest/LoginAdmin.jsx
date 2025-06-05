@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { alerta, generarToken } from "../../helpers/funciones";
-import { usuarios } from "../../services/database";
+import { alerta } from "../../helpers/funciones";
 import "./LoginAdmin.css";
 import { Link } from "react-router-dom";
 
@@ -60,10 +59,8 @@ function LoginAdmin() {
   function iniciarSesion() {
     buscarUsuario()
       .then((user) => {
-        debugger;
         if (user && user.accessToken) {
-          let tokenAcceso = generarToken();
-          localStorage.setItem("token", tokenAcceso);
+          localStorage.setItem("token", user.accessToken);
           alerta("Bienvenido", "Acceso al sistema", "success");
           redireccion("/admin");
         } else {

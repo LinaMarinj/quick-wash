@@ -28,17 +28,17 @@ function FormRegisterVehicles() {
   const [apellidoCliente, setApellidoCliente] = useState("");
   const [telefonoCliente, setTelefonoCliente] = useState("");
   const [correoCliente, setCorreoCliente] = useState("");
+  
+  
 
+  // URLs de la API (¡Reemplaza con tus URLs reales!)
   const API_URL_MARCAS = "TU_URL_DE_LA_API/marcas";
   const API_URL_TIPOS_VEHICULO = "http://localhost:8081/api/typevehicles";
 
   const myHeaders = new Headers();
   myHeaders.append("Accept", "*/*");
   myHeaders.append("Content-Type", "application/json");
-  myHeaders.append(
-    "Authorization",
-    "Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJtYXJpYWdvbWV6QGdtYWlsLmNvbSIsImlhdCI6MTc0ODk4NDI4NiwiZXhwIjoxNzQ5MDcwNjg2fQ.HXH9miWY9ZnFdxzhW-ryprVfqRppx0B-44V4RTxoFqFbNM8EcD79DSOQcjJJszUh"
-  );
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
   const requestOptions = {
     method: "GET",
@@ -64,7 +64,6 @@ function FormRegisterVehicles() {
         setError(error.message);
       });
   }
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -82,8 +81,8 @@ function FormRegisterVehicles() {
     };
 
     fetchData();
-    buscarTiposVehiculo();
-  }, []);
+    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehículo
+  }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   const registroVehiculoExitoso = () => {
     Swal.fire({
@@ -176,8 +175,8 @@ function FormRegisterVehicles() {
               >
                 <option value="">Seleccione</option>
                 {marcas.map((marca) => (
-                  <option key={marca.id} value={marca.nombre}>
-                    {marca.nombre}
+                  <option key={marca.id} value={marca.name}>
+                    {marca.name}
                   </option>
                 ))}
               </select>
