@@ -1,17 +1,17 @@
-
 #seccionNumeroUno {
-   text-align: center;
+  text-align: center;
   padding: 50px;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url("/fondoUno.webp");
-  background-position: 0 75%;
+  background: none;
+  background-position: center;
   justify-content: center;
+  background-size: cover;
   display: flex;
   align-items: center;
   background-attachment: fixed;
   position: relative;
   top: -85px;
   height: 100vh;
+  overflow: hidden;
 }
 
 #seccionNumeroUno h1 {
@@ -19,4 +19,8 @@
   font-size: 5rem;
   padding: 30px;
   font-weight: 600;
+}
+
+.carousel-bg {
+  z-index: 1;
 }

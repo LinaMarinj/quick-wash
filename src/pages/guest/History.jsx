@@ -8,9 +8,10 @@ function History() {
           <img src="/car.png" />
           <section className="container">
             <div>
-              <h1 id="titulo">¡TU RECOMPENSA ESTÁ CERCA!</h1>
-              <p>
-                Consulta y descubre cuántas visitas te faltan para tu recompensa
+              <h1 id="titulo">¡EN QUICK WASH, PREMIAMOS TU FIDELIDAD!</h1>
+              <p className="text-2xl m-5">
+                Revisa cuántas veces has venido y en tu próxima visita pregunta
+                en caja por tus beneficios
               </p>
 
               <form id="form">
