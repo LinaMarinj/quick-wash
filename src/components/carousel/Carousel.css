@@ -1,0 +1,22 @@
+
+#seccionNumeroUno {
+   text-align: center;
+  padding: 50px;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("/fondoUno.webp");
+  background-position: 0 75%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  background-attachment: fixed;
+  position: relative;
+  top: -85px;
+  height: 100vh;
+}
+
+#seccionNumeroUno h1 {
+  color: rgb(250, 247, 247);
+  font-size: 5rem;
+  padding: 30px;
+  font-weight: 600;
+}
