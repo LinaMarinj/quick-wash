@@ -1,35 +1,27 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
+
 function FormRegisterVehicles() {
   const [placa, setPlaca] = useState("");
+
   const [marcas, setMarcas] = useState([]);
   const [marcaSeleccionada, setMarcaSeleccionada] = useState("");
-  const [colores, setColores] = useState([]); // Puedes cargar colores desde la API si lo deseas
-  const [colorSeleccionado, setColorSeleccionado] = useState("");
+
+  const [color, setColor] = useState("");
+
   const [tiposVehiculo, setTiposVehiculo] = useState([]);
   const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState("");
 
-  const [servicios, setServicios] = useState([
-    { id: 1, nombre: "Lavado Básico" },
-    { id: 2, nombre: "Lavado Premium" },
-    { id: 3, nombre: "Encerado" },
-    { id: 4, nombre: "Aspirado" },
-  ]);
+  const [servicios, setServicios] = useState([]);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
-  const [fechaServicio, setFechaServicio] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(undefined);
-  const [nombreCliente, setNombreCliente] = useState("");
-  const [apellidoCliente, setApellidoCliente] = useState("");
-  const [telefonoCliente, setTelefonoCliente] = useState("");
+
   const [correoCliente, setCorreoCliente] = useState("");
 
-  // URLs de la API (¡Reemplaza con tus URLs reales!)
-  const API_URL_MARCAS = "TU_URL_DE_LA_API/marcas";
-  const API_URL_TIPOS_VEHICULO = "http://localhost:8081/api/typevehicles"; //poisble URL de API Local
-  const API_URL_SERVICIOS = "TU_URL_DE_LA_API/servicios";
+  const [fechaServicio, setFechaServicio] = useState("");
+
+  const [error, setError] = useState(undefined);
 
   const myHeaders = new Headers();
   myHeaders.append("Accept", "*/*");
@@ -45,7 +37,7 @@ function FormRegisterVehicles() {
 
   function buscarTiposVehiculo() {
     // Función de  busueda de tipos de vehículo
-    return fetch(API_URL_TIPOS_VEHICULO, requestOptions)
+    return fetch("http://localhost:8081/api/typevehicles", requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -82,38 +74,45 @@ function FormRegisterVehicles() {
         setError(error.message);
       });
   }
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [marcasRes, tiposRes, serviciosRes] = await Promise.all([
-          fetch(API_URL_MARCAS),
-          fetch(API_URL_SERVICIOS),
-        ]);
 
-        /*if (!marcasRes.ok || !serviciosRes.ok) {
-          throw new Error(
-            `Error al cargar datos: ${marcasRes.status} ${serviciosRes.status}`
-          );
+  function buscarServicios() {
+    // Función de  busueda de tipos de vehículo
+    return fetch("http://localhost:8081/api/services", requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(`Error al cargar los servicios: ${response.status}`);
         }
+      })
+      .then((data) => {
+        setServicios(data);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(error.message);
+      });
+  }
 
-        const marcasData = await marcasRes.json();
-        const serviciosData = await serviciosRes.json();
+  function buscarFecha() {
+    const interval = setInterval(() => {
+      const fechaDelSistema = new Date();
+      setFechaServicio(
+        fechaDelSistema.toLocaleDateString() +
+          "-" +
+          fechaDelSistema.toLocaleTimeString()
+      );
+    }, 1000);
 
-        setMarcas(marcasData);
-        setServicios(serviciosData);*/
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
+    return () => clearInterval(interval);
+  }
 
-    fetchData();
-    buscarTiposVehiculo(); // agrego función para buscar el tipo de vehí
-    // culo
+  useEffect(() => {
+    buscarTiposVehiculo();
     buscarMarcas();
-  }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
+    buscarServicios();
+    buscarFecha();
+  }, []);
 
   const registroVehiculoExitoso = () => {
     Swal.fire({
@@ -146,11 +145,8 @@ function FormRegisterVehicles() {
     const datos = {
       placa,
       marca: marcaSeleccionada,
-      color: colorSeleccionado,
+      color: color,
       tipo: tipoVehiculoSeleccionado,
-      nombre: nombreCliente,
-      apellido: apellidoCliente,
-      telefono: telefonoCliente,
       correo: correoCliente,
       servicios: serviciosSeleccionados,
       fecha: fechaServicio,
@@ -179,15 +175,13 @@ function FormRegisterVehicles() {
   const handleServicioChange = (servicioId) => {
     const id = Number(servicioId);
     if (serviciosSeleccionados.includes(id)) {
-      setServiciosSeleccionados(serviciosSeleccionados.filter((sid) => sid !== id));
+      setServiciosSeleccionados(
+        serviciosSeleccionados.filter((sid) => sid !== id)
+      );
     } else {
       setServiciosSeleccionados([...serviciosSeleccionados, id]);
     }
   };
-
-  if (loading) {
-    return <div>Cargando datos...</div>;
-  }
 
   if (error) {
     return <div>Error al cargar los datos: {error}</div>;
@@ -240,8 +234,8 @@ function FormRegisterVehicles() {
                 type="text"
                 name="color"
                 className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-                value={colorSeleccionado}
-                onChange={(e) => setColorSeleccionado(e.target.value)}
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
               />
             </div>
             <div className="w-1/2">
@@ -262,47 +256,14 @@ function FormRegisterVehicles() {
             </div>
           </div>
 
-          <h2 className="text-base text-gray-500 font-semibold mt-2">
-            Cliente
-          </h2>
-
-          <div className="flex gap-2">
-            <input
-              required
-              type="text"
-              name="nombre"
-              placeholder="Nombre"
-              className="w-1/2 border bg-gray-50 border-gray-300 rounded px-2 py-1"
-              value={nombreCliente}
-              onChange={(e) => setNombreCliente(e.target.value)}
-            />
-            <input
-              required
-              type="text"
-              name="apellido"
-              placeholder="Apellido"
-              className="w-1/2 border bg-gray-50 border-gray-300 rounded px-2 py-1"
-              value={apellidoCliente}
-              onChange={(e) => setApellidoCliente(e.target.value)}
-            />
-          </div>
-
-          <div className="flex gap-2">
-            <input
-              required
-              type="tel"
-              name="telefono"
-              placeholder="Teléfono"
-              className="w-1/2 border bg-gray-50 border-gray-300 rounded px-2 py-1"
-              value={telefonoCliente}
-              onChange={(e) => setTelefonoCliente(e.target.value)}
-            />
+          <div className=" gap-2">
+            <label className="block text-sm font-medium mb-1">Correo</label>
             <input
               required
               type="email"
               name="correo"
               placeholder="Correo"
-              className="w-1/2 border bg-gray-50 border-gray-300 rounded px-2 py-1"
+              className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
               value={correoCliente}
               onChange={(e) => setCorreoCliente(e.target.value)}
             />
@@ -322,19 +283,16 @@ function FormRegisterVehicles() {
                   checked={serviciosSeleccionados.includes(servicio.id)}
                   onChange={() => handleServicioChange(servicio.id)}
                 />
-                {servicio.nombre}
+                {servicio.name}
               </label>
             ))}
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Fecha</label>
-            <input
-              type="date"
-              className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-              value={fechaServicio}
-              onChange={(e) => setFechaServicio(e.target.value)}
-            />
+            <p lassName="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1">
+              {fechaServicio}
+            </p>
           </div>
 
           <p className="text-gray-500 text-xs italic text-center">
