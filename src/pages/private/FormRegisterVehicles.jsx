@@ -7,12 +7,12 @@ function FormRegisterVehicles() {
   const [placa, setPlaca] = useState("");
 
   const [marcas, setMarcas] = useState([]);
-  const [marcaSeleccionada, setMarcaSeleccionada] = useState("");
+  const [marcaSeleccionada, setMarcaSeleccionada] = useState(0);
 
   const [color, setColor] = useState("");
 
   const [tiposVehiculo, setTiposVehiculo] = useState([]);
-  const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState("");
+  const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState(0);
 
   const [servicios, setServicios] = useState([]);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
@@ -139,47 +139,107 @@ function FormRegisterVehicles() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const datos = {
-      placa,
-      marca: marcaSeleccionada,
-      color: color,
-      tipo: tipoVehiculoSeleccionado,
-      correo: correoCliente,
-      servicios: serviciosSeleccionados,
-      fecha: fechaServicio,
-    };
+    try {
+      // 1. Buscar si el vehículo ya existe por placa
+      const response = await fetch(
+        "http://localhost:8081/api/vehicles",
+        requestOptions
+      );
+      if (!response.ok) {
+        throw new Error(`Error al consultar los vehículos: ${response.status}`);
+      }
+      const vehiculos = await response.json();
 
-    fetch("https://api/services/{id}", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-      body: JSON.stringify(datos),
-    })
-      .then((response) => {
-        if (response.ok) {
-          registroVehiculoExitoso();
-        } else {
-          throw new Error("Error al registrar el vehículo");
+      // 2. Buscar el vehículo por placa
+      const vehiculoExistente = vehiculos.find(
+        (vehiculo) => vehiculo.plate === placa
+      );
+
+      let idVehiculo;
+
+      if (vehiculoExistente) {
+        // Si el vehículo ya existe, usamos su id
+        idVehiculo = vehiculoExistente.id;
+      } else {
+        debugger;
+        // Si no existe, lo creamos y obtenemos su id
+        const body = JSON.stringify({
+          plate: placa,
+          typeVehicle: tipoVehiculoSeleccionado,
+          brand: marcaSeleccionada,
+          color: color,
+        });
+
+        const requestOptionsPost = {
+          method: "POST",
+          headers: myHeaders,
+          body: body,
+          redirect: "follow",
+        };
+
+        const responsePost = await fetch(
+          "http://localhost:8081/api/vehicles",
+          requestOptionsPost
+        );
+        if (!responsePost.ok) {
+          throw new Error(
+            `Error al registrar el vehículo: ${responsePost.status}`
+          );
         }
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+        const nuevoVehiculo = await responsePost.json();
+        idVehiculo = nuevoVehiculo.id;
+      }
+
+      // 3. Preparar los datos para registrar el servicio
+      const datos = {
+        email: correoCliente,
+        services: serviciosSeleccionados,
+        vehicle: {
+          id: idVehiculo,
+        },
+        user: {
+          id: 2,
+        },
+      };
+
+      // 4. Registrar el servicio
+      const responseRegister = await fetch(
+        "http://localhost:8081/api/registers",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          body: JSON.stringify(datos),
+        }
+      );
+
+      if (responseRegister.ok) {
+        registroVehiculoExitoso();
+      } else {
+        throw new Error("Error al registrar el servicio del vehículo");
+      }
+    } catch (error) {
+      setError(error.message);
+      console.error(error);
+    }
   };
 
   const handleServicioChange = (servicioId) => {
     const id = Number(servicioId);
-    if (serviciosSeleccionados.includes(id)) {
+
+    if (serviciosSeleccionados.some((s) => s.id === id)) {
+      // Eliminar el servicio del array
       setServiciosSeleccionados(
-        serviciosSeleccionados.filter((sid) => sid !== id)
+        serviciosSeleccionados.filter((s) => s.id !== id)
       );
     } else {
-      setServiciosSeleccionados([...serviciosSeleccionados, id]);
+      // Agregar el servicio con la estructura { id: X }
+      setServiciosSeleccionados([...serviciosSeleccionados, { id }]);
     }
   };
 
@@ -194,7 +254,7 @@ function FormRegisterVehicles() {
       <section className="flex flex-col items-center px-4 mt-5 mb-5">
         <h1 className="text-2xl font-bold mb-4">Registro de Vehículos</h1>
 
-        <form className="w-full max-w-sm space-y-2" onSubmit={handleSubmit}>
+        <form className="w-full max-w-sm space-y-2">
           <div className="flex gap-2">
             <div className="w-1/2">
               <label className="block text-sm font-medium mb-1">Placa</label>
@@ -213,12 +273,17 @@ function FormRegisterVehicles() {
               <select
                 id="marcas"
                 className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-                value={marcaSeleccionada}
-                onChange={(e) => setMarcaSeleccionada(e.target.value)}
+                value={marcaSeleccionada ? marcaSeleccionada.id : ""}
+                onChange={(e) => {
+                  const selected = marcas.find(
+                    (m) => m.id === Number(e.target.value)
+                  );
+                  setMarcaSeleccionada(selected || null);
+                }}
               >
                 <option value="">Seleccione</option>
                 {marcas.map((marca) => (
-                  <option key={marca.id} value={marca.name}>
+                  <option key={marca.id} value={marca.id}>
                     {marca.name}
                   </option>
                 ))}
@@ -239,16 +304,25 @@ function FormRegisterVehicles() {
               />
             </div>
             <div className="w-1/2">
-              <label className="block text-sm font-medium mb-1">Tipo</label>
+              <label className="block text-sm font-medium mb-1">
+                Tipo de Vehiculo
+              </label>
               <select
                 id="tipo"
                 className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-                value={tipoVehiculoSeleccionado}
-                onChange={(e) => setTipoVehiculoSeleccionado(e.target.value)}
+                value={
+                  tipoVehiculoSeleccionado ? tipoVehiculoSeleccionado.id : ""
+                }
+                onChange={(e) => {
+                  const selected = tiposVehiculo.find(
+                    (t) => t.id === Number(e.target.value)
+                  );
+                  setTipoVehiculoSeleccionado(selected || null);
+                }}
               >
                 <option value="">Seleccione</option>
                 {tiposVehiculo.map((tipo) => (
-                  <option key={tipo.id} value={tipo.name}>
+                  <option key={tipo.id} value={tipo.id}>
                     {tipo.name}
                   </option>
                 ))}
@@ -280,7 +354,9 @@ function FormRegisterVehicles() {
                   type="checkbox"
                   className="mr-2 h-4 w-4 text-red-500"
                   value={servicio.id}
-                  checked={serviciosSeleccionados.includes(servicio.id)}
+                  checked={serviciosSeleccionados.some(
+                    (s) => s.id === servicio.id
+                  )}
                   onChange={() => handleServicioChange(servicio.id)}
                 />
                 {servicio.name}
@@ -311,7 +387,8 @@ function FormRegisterVehicles() {
 
             <button
               className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
             >
               Registrar
             </button>
