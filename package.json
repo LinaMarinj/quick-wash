@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@table-library/react-table-library": "^4.1.15",
     "@tailwindcss/vite": "^4.0.9",
     "apexcharts": "^4.5.0",
     "react": "^19.0.0",
