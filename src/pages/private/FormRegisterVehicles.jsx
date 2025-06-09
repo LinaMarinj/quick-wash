@@ -10,6 +10,7 @@ import Modal from "../../components/modal/Modal";
 import Eliminar from "../../assets/img/icons/eliminar.png";
 import Editar from "../../assets/img/icons/editar.png";
 import { alertaConfirmar } from "../../helpers/funciones";
+import ControlPanel from "../../components/aside/ControlPanel";
 
 function FormRegisterVehicles() {
   const [open, setOpen] = useState(false);
@@ -74,6 +75,7 @@ function FormRegisterVehicles() {
   ];
 
   const visitasTabla = visitas.map((item) => ({
+    id: item.id,
     placa: item.vehicle?.plate || "",
     servicios: item.services.map((s) => s.name).join(", "),
     correo: item.email || "",
@@ -368,205 +370,227 @@ function FormRegisterVehicles() {
   return (
     <>
       <MenuPrivate />
-      <section className="px-4">
-        <h1 className="text-4xl font-bold mt-4 mb-8 text-center">
-          Gestion de Visitas
-        </h1>
-      </section>
+      <main id="mainDasboard">
+        <section className="px-4">
+          <h1 className="text-4xl font-bold mt-4 mb-8 text-center">
+            Gestion de Visitas
+          </h1>
+        </section>
 
-      <section className="flex flex-col items-end px-4 mt-5 mb-5">
-        <button
-          className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
-          type="button"
-          onClick={() => setOpen(true)}
-        >
-          Registrar una Visita
-        </button>
-      </section>
+        <section className="flex flex-col items-end px-4 mt-5 mb-5">
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
+            type="button"
+            onClick={() => setOpen(true)}
+          >
+            Registrar una Visita
+          </button>
+        </section>
 
-      <section className="flex flex-col items-center px-4 mt-5 mb-5">
-        <Modal
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          title="Registro de Vehículos"
-        >
-          <h2 className="text-2xl font-bold mb-4 text-center">
-            Registro de Vehículos
-          </h2>
+        <section className="flex flex-row items-start px-4 mt-5 mb-5 gap-6">
+          <div className="w-full max-w-xs">
+            <ControlPanel />
+          </div>
+          <div className="flex-1">
+            <Modal
+              isOpen={open}
+              onClose={() => setOpen(false)}
+              title="Registro de Vehículos"
+            >
+              <h2 className="text-2xl font-bold mb-4 text-center">
+                Registro de Vehículos
+              </h2>
 
-          <form className="w-full space-y-2">
-            <div className="flex gap-2">
-              <div className="w-1/2">
-                <label className="block text-sm font-medium mb-1">Placa</label>
-                <input
-                  required
-                  type="text"
-                  name="placa"
-                  className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-                  value={placa}
-                  onChange={(e) => setPlaca(e.target.value)}
-                />
-              </div>
+              <form className="w-full space-y-2">
+                <div className="flex gap-2">
+                  <div className="w-1/2">
+                    <label className="block text-sm font-medium mb-1">
+                      Placa
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      name="placa"
+                      className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                      value={placa}
+                      onChange={(e) => setPlaca(e.target.value)}
+                    />
+                  </div>
 
-              <div className="w-1/2">
-                <label className="block text-sm font-medium mb-1">Marca</label>
-                <select
-                  id="marcas"
-                  className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-                  value={marcaSeleccionada ? marcaSeleccionada.id : ""}
-                  onChange={(e) => {
-                    const selected = marcas.find(
-                      (m) => m.id === Number(e.target.value)
-                    );
-                    setMarcaSeleccionada(selected || null);
-                  }}
-                >
-                  <option value="">Seleccione</option>
-                  {marcas.map((marca) => (
-                    <option key={marca.id} value={marca.id}>
-                      {marca.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+                  <div className="w-1/2">
+                    <label className="block text-sm font-medium mb-1">
+                      Marca
+                    </label>
+                    <select
+                      id="marcas"
+                      className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                      value={marcaSeleccionada ? marcaSeleccionada.id : ""}
+                      onChange={(e) => {
+                        const selected = marcas.find(
+                          (m) => m.id === Number(e.target.value)
+                        );
+                        setMarcaSeleccionada(selected || null);
+                      }}
+                    >
+                      <option value="">Seleccione</option>
+                      {marcas.map((marca) => (
+                        <option key={marca.id} value={marca.id}>
+                          {marca.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-            <div className="flex gap-2">
-              <div className="w-1/2">
-                <label className="block text-sm font-medium mb-1">Color</label>
-                <input
-                  required
-                  type="text"
-                  name="color"
-                  className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-                  value={color}
-                  onChange={(e) => setColor(e.target.value)}
-                />
-              </div>
-              <div className="w-1/2">
-                <label className="block text-sm font-medium mb-1">
-                  Tipo de Vehiculo
-                </label>
-                <select
-                  id="tipo"
-                  className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-                  value={
-                    tipoVehiculoSeleccionado ? tipoVehiculoSeleccionado.id : ""
-                  }
-                  onChange={(e) => {
-                    const selected = tiposVehiculo.find(
-                      (t) => t.id === Number(e.target.value)
-                    );
-                    setTipoVehiculoSeleccionado(selected || null);
-                  }}
-                >
-                  <option value="">Seleccione</option>
-                  {tiposVehiculo.map((tipo) => (
-                    <option key={tipo.id} value={tipo.id}>
-                      {tipo.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+                <div className="flex gap-2">
+                  <div className="w-1/2">
+                    <label className="block text-sm font-medium mb-1">
+                      Color
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      name="color"
+                      className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                      value={color}
+                      onChange={(e) => setColor(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label className="block text-sm font-medium mb-1">
+                      Tipo de Vehiculo
+                    </label>
+                    <select
+                      id="tipo"
+                      className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                      value={
+                        tipoVehiculoSeleccionado
+                          ? tipoVehiculoSeleccionado.id
+                          : ""
+                      }
+                      onChange={(e) => {
+                        const selected = tiposVehiculo.find(
+                          (t) => t.id === Number(e.target.value)
+                        );
+                        setTipoVehiculoSeleccionado(selected || null);
+                      }}
+                    >
+                      <option value="">Seleccione</option>
+                      {tiposVehiculo.map((tipo) => (
+                        <option key={tipo.id} value={tipo.id}>
+                          {tipo.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-            <div className=" gap-2">
-              <label className="block text-sm font-medium mb-1">Correo</label>
-              <input
-                required
-                type="email"
-                name="correo"
-                placeholder="Correo"
-                className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
-                value={correoCliente}
-                onChange={(e) => setCorreoCliente(e.target.value)}
-              />
-            </div>
-
-            <h2 className="text-base text-gray-500 font-semibold mt-2">
-              Servicios
-            </h2>
-
-            <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-              {servicios.map((servicio) => (
-                <label key={servicio.id} className="flex items-center text-sm">
+                <div className=" gap-2">
+                  <label className="block text-sm font-medium mb-1">
+                    Correo
+                  </label>
                   <input
-                    type="checkbox"
-                    className="mr-2 h-4 w-4 text-red-500"
-                    value={servicio.id}
-                    checked={serviciosSeleccionados.some(
-                      (s) => s.id === servicio.id
-                    )}
-                    onChange={() => handleServicioChange(servicio.id)}
+                    required
+                    type="email"
+                    name="correo"
+                    placeholder="Correo"
+                    className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
+                    value={correoCliente}
+                    onChange={(e) => setCorreoCliente(e.target.value)}
                   />
-                  {servicio.name}
-                </label>
-              ))}
+                </div>
+
+                <h2 className="text-base text-gray-500 font-semibold mt-2">
+                  Servicios
+                </h2>
+
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                  {servicios.map((servicio) => (
+                    <label
+                      key={servicio.id}
+                      className="flex items-center text-sm"
+                    >
+                      <input
+                        type="checkbox"
+                        className="mr-2 h-4 w-4 text-red-500"
+                        value={servicio.id}
+                        checked={serviciosSeleccionados.some(
+                          (s) => s.id === servicio.id
+                        )}
+                        onChange={() => handleServicioChange(servicio.id)}
+                      />
+                      {servicio.name}
+                    </label>
+                  ))}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Fecha
+                  </label>
+                  <p lassName="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1">
+                    {fechaServicio}
+                  </p>
+                </div>
+
+                <p className="text-gray-500 text-xs italic text-center">
+                  Ingrese todos los datos correctamente
+                </p>
+
+                <div className="flex justify-center gap-2 mt-2">
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      limpiarFormulario();
+                    }}
+                  >
+                    Cancelar
+                  </button>
+
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
+                    type="button"
+                    onClick={handleSubmit}
+                  >
+                    Registrar
+                  </button>
+                </div>
+              </form>
+            </Modal>
+
+            <CompactTable
+              columns={COLUMNS}
+              data={{ nodes: visitasTabla }}
+              theme={theme}
+              pagination={pagination}
+            />
+            <br />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span className="mr-5">
+                Total Pages: {pagination.state.getTotalPages(visitasTabla)}
+              </span>
+              <span>
+                Page:{" "}
+                {pagination.state.getPages(visitasTabla).map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    style={{
+                      fontWeight:
+                        pagination.state.page === index ? "bold" : "normal",
+                    }}
+                    onClick={() => pagination.fns.onSetPage(index)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </span>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Fecha</label>
-              <p lassName="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1">
-                {fechaServicio}
-              </p>
-            </div>
-
-            <p className="text-gray-500 text-xs italic text-center">
-              Ingrese todos los datos correctamente
-            </p>
-
-            <div className="flex justify-center gap-2 mt-2">
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  limpiarFormulario();
-                }}
-              >
-                Cancelar
-              </button>
-
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
-                type="button"
-                onClick={handleSubmit}
-              >
-                Registrar
-              </button>
-            </div>
-          </form>
-        </Modal>
-
-        <CompactTable
-          columns={COLUMNS}
-          data={{ nodes: visitasTabla }}
-          theme={theme}
-          pagination={pagination}
-        />
-        <br />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span className="mr-5">
-            Total Pages: {pagination.state.getTotalPages(visitasTabla)}
-          </span>
-          <span>
-            Page:{" "}
-            {pagination.state.getPages(visitasTabla).map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                style={{
-                  fontWeight:
-                    pagination.state.page === index ? "bold" : "normal",
-                }}
-                onClick={() => pagination.fns.onSetPage(index)}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </span>
-        </div>
-      </section>
+          </div>
+        </section>
+      </main>
     </>
   );
 }
