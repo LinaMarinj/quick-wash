@@ -7,6 +7,9 @@ import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 import { usePagination } from "@table-library/react-table-library/pagination";
 import Modal from "../../components/modal/Modal";
+import Eliminar from "../../assets/img/icons/eliminar.png";
+import Editar from "../../assets/img/icons/editar.png";
+import { alertaConfirmar } from "../../helpers/funciones";
 
 function FormRegisterVehicles() {
   const [open, setOpen] = useState(false);
@@ -48,6 +51,26 @@ function FormRegisterVehicles() {
     { label: "Correo", renderCell: (item) => item.correo },
     { label: "Fecha", renderCell: (item) => item.fecha },
     { label: "Operador", renderCell: (item) => item.operador },
+    {
+      label: "Acciones",
+      renderCell: (item) => (
+        <div className="flex gap-2">
+          <img
+            src={Eliminar}
+            alt="Eliminar"
+            title="Eliminar"
+            className="w-5 h-5 m-2 cursor-pointer hover:scale-110 transition-transform"
+            onClick={() => alertaConfirmar(() => eliminarVisita(item.id))}
+          />
+          <img
+            src={Editar}
+            alt="Editar"
+            title="Editar"
+            className="w-5 h-5 m-2 cursor-pointer hover:scale-110 transition-transform"
+          />
+        </div>
+      ),
+    },
   ];
 
   const visitasTabla = visitas.map((item) => ({
@@ -321,11 +344,34 @@ function FormRegisterVehicles() {
     return <div>Error al cargar los datos: {error}</div>;
   }
 
+  const eliminarVisita = async (id) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8081/api/registers/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+      if (response.ok) {
+        buscarVisitas();
+      } else {
+        throw new Error("Error al eliminar el registro");
+      }
+    } catch (error) {
+      Swal.fire("Error", error.message, "error");
+    }
+  };
+
   return (
     <>
       <MenuPrivate />
       <section className="px-4">
-        <h1 className="text-4xl font-bold mt-4 mb-8 text-center">Gestion de Visitas</h1>
+        <h1 className="text-4xl font-bold mt-4 mb-8 text-center">
+          Gestion de Visitas
+        </h1>
       </section>
 
       <section className="flex flex-col items-end px-4 mt-5 mb-5">
@@ -473,7 +519,10 @@ function FormRegisterVehicles() {
               <button
                 className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
                 type="button"
-                onClick={() => {setOpen(false); limpiarFormulario();}}
+                onClick={() => {
+                  setOpen(false);
+                  limpiarFormulario();
+                }}
               >
                 Cancelar
               </button>
