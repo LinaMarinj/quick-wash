@@ -20,42 +20,51 @@ function Home() {
         <OurServices />
         <History />
 
-        <section id="seccionNumeroCinco">
+        <section id="seccionNumeroCinco" className="bg-gray-800">
           <div>
-            <h2 className="text-center p-5 text-5xl text-white font-bold">
+            <h2 className="text-center p-5 text-4xl sm:text-5xl text-white font-bold">
               Contáctanos
             </h2>
           </div>
-          <div className="flex justify-items-center justify-between gap-8 p-6 text-white">
+
+          <div className="flex flex-col md:flex-row justify-center items-center gap-8 p-6 text-white">
             <div className="flex flex-col items-center text-center max-w-xs">
               <img
                 src={Contacto}
-                alt="Número de contacto"
+                alt="Ícono de teléfono"
                 className="w-10 h-10 mb-2"
               />
-              <p className="text-1xl p-5 font-bold">+57 300 000 0000 <br /> Llámanos</p>
+              <p className="text-lg p-5 font-bold">
+                +57 300 000 0000 <br />
+                <span className="font-normal text-sm">Llámanos</span>
+              </p>
             </div>
 
             <div className="flex flex-col items-center text-center max-w-xs">
               <img
                 src={Ubicacion}
-                alt="Dirección del establecimiento"
+                alt="Ícono de ubicación"
                 className="w-10 h-10 mb-2"
               />
-              <p className="text-1xl p-5 font-bold">
-                Calle 45A #67B-23, Barrio Laureles, Medellín
+              <p className="text-lg p-5 font-bold">
+                Calle 45A #67B-23 <br />
+                <span className="font-normal text-sm">
+                  Barrio Laureles, Medellín
+                </span>
               </p>
             </div>
 
             <div className="flex flex-col items-center text-center max-w-xs">
               <img
                 src={Horario}
-                alt="Horario de atención"
+                alt="Ícono de reloj o calendario"
                 className="w-10 h-10 mb-2"
               />
-              <p className="text-1xl p-5 font-bold">
+              <p className="text-lg p-5 font-bold">
                 Lunes a sábado: 8:00 a.m. - 6:00 p.m. <br />
-                Domingos y festivos: 9:00 a.m. - 2:00 p.m.
+                <span className="font-normal text-sm">
+                  Domingos y festivos: 9:00 a.m. - 2:00 p.m.
+                </span>
               </p>
             </div>
           </div>
