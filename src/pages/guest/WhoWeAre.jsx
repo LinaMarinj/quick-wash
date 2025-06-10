@@ -3,7 +3,8 @@ function WhoWeAre() {
     <section id="seccionNumeroDos">
       <div>
         <h3>¿Quienes somos?</h3>
-
+        <p>Expertos en lavado automotriz</p>
+        <br />
         <p>
           Somos un equipo dedicado a ofrecerte un servicio rápido y eficiente
           para que tu vehículo siempre luzca impecable. Con nuestra experiencia

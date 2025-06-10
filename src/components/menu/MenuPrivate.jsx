@@ -1,7 +1,18 @@
 import { Link } from "react-router-dom";
+import { alerta } from "../../helpers/funciones.js";
 import User from "../../assets/img/dashBoard/user.webp";
+import { useNavigate } from "react-router-dom";
 
 function MenuPrivate() {
+  let redireccion = useNavigate();
+
+  function cerrarSesion() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    redireccion("/");
+    alerta("Bai", "Cerrando sesión", "info");
+  }
+
   return (
     <header>
       <nav id="navBar">
@@ -32,14 +43,9 @@ function MenuPrivate() {
             </li>
 
             <li>
-              <Link
-                to="/"
-                onClick={() => {
-                  localStorage.removeItem("token");
-                }}
-              >
+              <button type="button" onClick={cerrarSesion}>
                 Salir
-              </Link>
+              </button>
             </li>
           </ul>
           <img id="avatarUno" src={User} alt="foto personal" />
