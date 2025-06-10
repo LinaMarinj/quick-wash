@@ -40,7 +40,7 @@ Para visualizar y ejecutar este proyecto en tu entorno local, sigue estos pasos:
 
 1.  **Clonar el Repositorio:** Utiliza Git para copiar el código fuente del proyecto
 
-https://github.com/LinaMarinj/maquetacion-momento-dos.git
+https://github.com/LinaMarinj/quick-wash.git
 
 2.  **Abrir con Visual Studio Code (o tu editor de código preferido):** Navega hasta la carpeta del proyecto que clonaste y ábrela con Visual Studio Code.
 
