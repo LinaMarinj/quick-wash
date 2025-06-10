@@ -304,53 +304,51 @@ function FormRegisterVehicles() {
     });
   };
 
-  const obtenerVehiculo = async () => {
-    const response = await fetch(
+  // Cambia obtenerVehiculo para que retorne el id:
+const obtenerVehiculo = async () => {
+  const response = await fetch(
+    "http://localhost:8081/api/vehicles",
+    requestOptions
+  );
+  if (!response.ok) {
+    throw new Error(`Error al consultar los vehículos: ${response.status}`);
+  }
+  const vehiculos = await response.json();
+
+  const vehiculoExistente = vehiculos.find(
+    (vehiculo) => vehiculo.plate === placa
+  );
+
+  if (vehiculoExistente) {
+    return vehiculoExistente.id;
+  } else {
+    const body = JSON.stringify({
+      plate: placa,
+      typeVehicle: tipoVehiculoSeleccionado,
+      brand: marcaSeleccionada,
+      color: color,
+    });
+
+    const requestOptionsPost = {
+      method: "POST",
+      headers: myHeaders,
+      body: body,
+      redirect: "follow",
+    };
+
+    const responsePost = await fetch(
       "http://localhost:8081/api/vehicles",
-      requestOptions
+      requestOptionsPost
     );
-    if (!response.ok) {
-      throw new Error(`Error al consultar los vehículos: ${response.status}`);
-    }
-    const vehiculos = await response.json();
-
-    // 2. Buscar el vehículo por placa
-    const vehiculoExistente = vehiculos.find(
-      (vehiculo) => vehiculo.plate === placa
-    );
-
-    if (vehiculoExistente) {
-      // Si el vehículo ya existe, usamos su id
-      setIdVehiculo(vehiculoExistente.id);
-    } else {
-      // Si no existe, lo creamos y obtenemos su id
-      const body = JSON.stringify({
-        plate: placa,
-        typeVehicle: tipoVehiculoSeleccionado,
-        brand: marcaSeleccionada,
-        color: color,
-      });
-
-      const requestOptionsPost = {
-        method: "POST",
-        headers: myHeaders,
-        body: body,
-        redirect: "follow",
-      };
-
-      const responsePost = await fetch(
-        "http://localhost:8081/api/vehicles",
-        requestOptionsPost
+    if (!responsePost.ok) {
+      throw new Error(
+        `Error al registrar el vehículo: ${responsePost.status}`
       );
-      if (!responsePost.ok) {
-        throw new Error(
-          `Error al registrar el vehículo: ${responsePost.status}`
-        );
-      }
-      const nuevoVehiculo = await responsePost.json();
-      setIdVehiculo(nuevoVehiculo.id);
     }
-  };
+    const nuevoVehiculo = await responsePost.json();
+    return nuevoVehiculo.id;
+  }
+};
 
   const editarVehiculo = async () => {
     // Si no existe, lo creamos y obtenemos su id
@@ -384,13 +382,14 @@ function FormRegisterVehicles() {
 
     try {
       // 1. Buscar si el vehículo ya existe por placa
-      await obtenerVehiculo();
+      const idVehiculoObtenido = await obtenerVehiculo();
+
       // 3. Preparar los datos para registrar el servicio
       const datos = {
         email: correoCliente,
         services: serviciosSeleccionados,
         vehicle: {
-          id: idVehiculo,
+          id: idVehiculoObtenido,
         },
         user: {
           id: 2,
