@@ -286,19 +286,7 @@ function FormRegisterVehicles() {
     Swal.fire({
       title: "Vehículo ingresado correctamente",
       html: `
-        <div>
           <div class="mb-4">✔️</div>
-          <p class="mb-4">
-            Visita Número: 10
-          </p>
-          <p class="font-bold mb-4">
-            Premio de Fidelización:
-          </p>
-          <div class="mb-4">
-            Shampoo
-              <img src="/shampoo.webp" alt="Shampoo" style="width: 150px; margin: auto;" />
-          </div>
-        </div>
       `,
       showConfirmButton: true,
       confirmButtonText: "Aceptar",
