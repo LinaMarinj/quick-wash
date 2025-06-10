@@ -34,7 +34,7 @@ nav ul li a {
 nav button {
   background-color: #e81c2e;
   color: white;
-  padding: 1rem 1rem;
+  padding: 5px;
   border: none;
   border-radius: 5px;
   cursor: pointer;

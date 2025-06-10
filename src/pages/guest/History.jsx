@@ -1,4 +1,3 @@
-import HistoryTable from "./HistoryTable";
 
 function History() {
   return (
@@ -6,26 +5,16 @@ function History() {
       <section id="historico">
         <div>
           <img src="/car.png" />
-          <section className="container">
+          <section>
             <div>
               <h1 id="titulo">¡EN QUICK WASH, PREMIAMOS TU FIDELIDAD!</h1>
               <p className="text-2xl m-5">
-                Revisa cuántas veces has venido y en tu próxima visita pregunta
-                en caja por tus beneficios
+                Pregunta por nuestros descuentos en tu próxima visita. Premios disponibles desde tu 5ta visita. <br /> ¡Te esperamos!
               </p>
-
-              <form id="form">
-                <label for="placa">* Placa</label>
-                <input type="text" id="placa" placeholder="KPS123" required />
-                <button type="button" id="btn">
-                  Consultar
-                </button>
-              </form>
             </div>
           </section>
         </div>
       </section>
-      <HistoryTable />
     </>
   );
 }

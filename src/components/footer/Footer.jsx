@@ -7,8 +7,7 @@ function Footer() {
         <div>
           <p>
             Disfruta de nuestros obsequios de fidelización sujetos a reglamento
-            empresarial. Podrás acceder a ellos a partir de tu <b>5ta visita</b>{" "}
-            a Quick Wash. ¡Te esperamos!
+            empresarial.
           </p>
         </div>
       </section>

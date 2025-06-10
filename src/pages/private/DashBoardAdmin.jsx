@@ -5,6 +5,7 @@ import "./DashBoardAdmin.css";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import QuestionImg from "../../assets/img/icons/question.png";
+import { useState, useEffect } from "react";
 
 function DashBoardAdmin() {
   const driverObj = driver({
@@ -57,6 +58,56 @@ function DashBoardAdmin() {
       },
     ],
   });
+  const [totalVehiculos, setTotalVehiculos] = useState(0);
+  const [totalServicios, setTotalServicios] = useState(0);
+
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  useEffect(() => {
+    fetch("http://localhost:8081/api/registers", requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Error al obtener el total de las visitas.");
+        }
+      })
+      .then((data) => {
+        setTotalVehiculos(Array.isArray(data) ? data.length : data.total || 0);
+      })
+      .catch((error) => {
+        console.error("Error al cargar cantidad de visitas:", error);
+        setTotalVehiculos(0);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:8081/api/registers", requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Error al obtener los servicios.");
+        }
+      })
+      .then((data) => {
+        const total = Array.isArray(data)
+          ? data.reduce((acc, reg) => acc + (reg.services?.length || 0), 0)
+          : 0;
+        setTotalServicios(total);
+      })
+      .catch((error) => {
+        console.error("Error al cargar cantidad de servicios:", error);
+        setTotalServicios(0);
+      });
+  }, []);
 
   return (
     <>
@@ -73,16 +124,16 @@ function DashBoardAdmin() {
           <ControlPanel />
 
           <div id="parteDos">
-            <h3>Vehículos Ingresados</h3>
+            <h3>Visitas Ingresadas</h3>
             <p style={{ textAlign: "center", fontSize: "3rem", margin: "5px" }}>
-              100
+              {totalVehiculos}
             </p>
             <p>En total</p>
           </div>
           <div id="parteTres">
             <h3>Servicios Realizados</h3>
             <p style={{ textAlign: "center", fontSize: "3rem", margin: "5px" }}>
-              100
+              {totalServicios}
             </p>
             <p>En total</p>
           </div>
@@ -94,7 +145,7 @@ function DashBoardAdmin() {
             <p>En total</p>
           </div>
 
-          <div id="parteCinco" className="row-span-3 col-start-2 row-start-2">
+          <div id="parteCinco" className="row-span-3 col-start-2 col-end-5 row-start-2">
             <p> Resumen de Servicios Realizados</p>
             <Graf />
           </div>

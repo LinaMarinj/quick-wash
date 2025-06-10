@@ -167,7 +167,7 @@ function FormRegisterVehicles() {
   };
 
   function buscarVisitas() {
-    // Función de  busueda de tipos de vehículo
+    // Función de búsqueda de visitas, ordena de más reciente a más antiguo
     return fetch("http://localhost:8081/api/registers", requestOptions)
       .then((response) => {
         if (response.ok) {
@@ -177,7 +177,13 @@ function FormRegisterVehicles() {
         }
       })
       .then((data) => {
-        setVisitas(data);
+        // Ordenar por fecha descendente (más reciente primero)
+        const visitasOrdenadas = [...data].sort((a, b) => {
+          const fechaA = new Date(a.registerDate).getTime();
+          const fechaB = new Date(b.registerDate).getTime();
+          return fechaB - fechaA;
+        });
+        setVisitas(visitasOrdenadas);
       })
       .catch((error) => {
         console.error(error);
@@ -304,6 +310,7 @@ function FormRegisterVehicles() {
     });
   };
 
+  // Cambia obtenerVehiculo para que retorne el id:
   const obtenerVehiculo = async () => {
     const response = await fetch(
       "http://localhost:8081/api/vehicles",
@@ -314,16 +321,13 @@ function FormRegisterVehicles() {
     }
     const vehiculos = await response.json();
 
-    // 2. Buscar el vehículo por placa
     const vehiculoExistente = vehiculos.find(
       (vehiculo) => vehiculo.plate === placa
     );
 
     if (vehiculoExistente) {
-      // Si el vehículo ya existe, usamos su id
-      setIdVehiculo(vehiculoExistente.id);
+      return vehiculoExistente.id;
     } else {
-      // Si no existe, lo creamos y obtenemos su id
       const body = JSON.stringify({
         plate: placa,
         typeVehicle: tipoVehiculoSeleccionado,
@@ -348,7 +352,7 @@ function FormRegisterVehicles() {
         );
       }
       const nuevoVehiculo = await responsePost.json();
-      setIdVehiculo(nuevoVehiculo.id);
+      return nuevoVehiculo.id;
     }
   };
 
@@ -384,13 +388,14 @@ function FormRegisterVehicles() {
 
     try {
       // 1. Buscar si el vehículo ya existe por placa
-      await obtenerVehiculo();
+      const idVehiculoObtenido = await obtenerVehiculo();
+
       // 3. Preparar los datos para registrar el servicio
       const datos = {
         email: correoCliente,
         services: serviciosSeleccionados,
         vehicle: {
-          id: idVehiculo,
+          id: idVehiculoObtenido,
         },
         user: {
           id: 2,
@@ -410,6 +415,7 @@ function FormRegisterVehicles() {
         }
       );
 
+      debugger;
       if (responseRegister.ok) {
         buscarVisitas();
         registroVehiculoExitoso();

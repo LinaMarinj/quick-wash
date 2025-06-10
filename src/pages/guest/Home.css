@@ -20,22 +20,17 @@ main#home {
 }
 
 #seccionNumeroDos h3 {
-  font-size: 3rem;
+  font-size: 2rem;
   margin-bottom: 50px;
+  font-weight: 500;
 }
 
 #seccionNumeroDos p {
-  max-width: 500px;
-  min-width: 300px;
   text-align: justify;
 }
 
-#tituloquienes {
-  font-size: 2rem;
-}
-
 .fotocarro {
-  max-width: 800px;
+  max-width: 650px;
   margin-left: 20px;
 }
 
@@ -77,11 +72,6 @@ main#home {
   margin: auto;
 }
 
-.container {
-  max-width: 1200px;
-  display: block;
-  margin: auto;
-}
 
 #historico #titulo {
   font-size: 1rem;
@@ -89,61 +79,6 @@ main#home {
   letter-spacing: 6px;
   color: #e81c2e;
 }
-
-#historico form {
-  background-color: #19191b;
-  padding: 2rem;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  display: grid;
-  grid-template-columns: 100px 9fr 1fr;
-  gap: 1rem;
-  align-items: center;
-}
-
-#historico form label {
-  display: block;
-  text-align: left;
-  margin: 1rem 0;
-}
-
-#historico form input {
-  padding: 1rem;
-  margin: 1rem 0;
-  border: none;
-  border-radius: 5px;
-  background-color: white;
-  color: black;
-}
-
-#historico form button {
-  background-color: #e81c2e;
-  color: white;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.hidden {
-  display: none;
-}
-
-main table {
-  background: white;
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 7px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-main table thead tr th,
-main table tbody tr td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 2px dotted #ccc;
-}
-
 #seccionNumeroCinco {
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url("/fondoUno.webp");
