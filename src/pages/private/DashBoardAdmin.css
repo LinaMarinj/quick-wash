@@ -28,17 +28,6 @@
   height: 60px;
 }
 
-#encabezado {
-  display: flex;
-  justify-content: center;
-}
-
-#encabezado h1 {
-  font-size: 1.6rem;
-  font-weight: 500;
-  margin: 16px;
-}
-
 #parteUno {
   background-color: #ffffff;
   border-radius: 5px;

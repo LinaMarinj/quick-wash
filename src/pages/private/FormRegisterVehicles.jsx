@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useDebugValue } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import MenuPrivate from "../../components/menu/MenuPrivate";
@@ -11,11 +11,67 @@ import Eliminar from "../../assets/img/icons/eliminar.png";
 import Editar from "../../assets/img/icons/editar.png";
 import { alertaConfirmar } from "../../helpers/funciones";
 import ControlPanel from "../../components/aside/ControlPanel";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+import QuestionImg from "../../assets/img/icons/question.png";
+
 
 function FormRegisterVehicles() {
+  const driverObj = driver({
+    showProgress: true,
+    steps: [
+      {
+        element: "#tour-example",
+        popover: {
+          title: "Bienvenido a la Ayuda",
+          description: "Da clic en el botón de siguiente o en la x para salir.",
+          side: "left",
+          align: "start",
+        },
+      },
+      {
+        element: "#btn-registrar-visita",
+        popover: {
+          title: "Registrar nueva visita",
+          description:
+            "Acceso al formulario para ingresar los datos del vehículo.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: "#table",
+        popover: {
+          title: "Tabla de registros",
+          description:
+            "Aquí puedes ver el registro de los vehículos ingresados al sistema con sus detalles.",
+          side: "left",
+          align: "start",
+        },
+      },
+      {
+        element: "#btn-acciones",
+        popover: {
+          title: "Botones de acciones",
+          description: "Podrás editar y eliminar los datos registrados.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        popover: {
+          title: "¡Excelente!",
+          description: "Estás listo para gestionar los registros.",
+        },
+      },
+    ],
+  });
+
   const [open, setOpen] = useState(false);
 
   const [visitas, setVisitas] = useState([]);
+
+  const [id, setId] = useState(0);
 
   const [placa, setPlaca] = useState("");
 
@@ -27,6 +83,8 @@ function FormRegisterVehicles() {
   const [tiposVehiculo, setTiposVehiculo] = useState([]);
   const [tipoVehiculoSeleccionado, setTipoVehiculoSeleccionado] = useState(0);
 
+  const [idVehiculo, setIdVehiculo] = useState(0);
+
   const [servicios, setServicios] = useState([]);
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
 
@@ -35,6 +93,8 @@ function FormRegisterVehicles() {
   const [fechaServicio, setFechaServicio] = useState("");
 
   const [error, setError] = useState(undefined);
+
+  const [registroEditar, setRegistroEditar] = useState(null);
 
   const theme = useTheme(getTheme());
 
@@ -55,7 +115,7 @@ function FormRegisterVehicles() {
     {
       label: "Acciones",
       renderCell: (item) => (
-        <div className="flex gap-2">
+        <div id="btn-acciones" className="flex gap-2">
           <img
             src={Eliminar}
             alt="Eliminar"
@@ -68,6 +128,7 @@ function FormRegisterVehicles() {
             alt="Editar"
             title="Editar"
             className="w-5 h-5 m-2 cursor-pointer hover:scale-110 transition-transform"
+            onClick={() => cargarDatosEditar(item)}
           />
         </div>
       ),
@@ -83,6 +144,10 @@ function FormRegisterVehicles() {
       ? new Date(item.registerDate).toLocaleString()
       : "",
     operador: item.user?.name || "",
+    color: item.vehicle?.color || "",
+    marca: item.vehicle?.brand || "",
+    tipo: item.vehicle?.typeVehicle || "",
+    serviciosOriginal: item.services || [],
   }));
 
   function onPaginationChange(action, state) {
@@ -201,6 +266,7 @@ function FormRegisterVehicles() {
   }, []);
 
   const limpiarFormulario = () => {
+    setId(0);
     setPlaca("");
     setMarcaSeleccionada(null);
     setColor("");
@@ -238,60 +304,60 @@ function FormRegisterVehicles() {
     });
   };
 
+  const obtenerVehiculo = async () => {
+    const response = await fetch(
+      "http://localhost:8081/api/vehicles",
+      requestOptions
+    );
+    if (!response.ok) {
+      throw new Error(`Error al consultar los vehículos: ${response.status}`);
+    }
+    const vehiculos = await response.json();
+
+    // 2. Buscar el vehículo por placa
+    const vehiculoExistente = vehiculos.find(
+      (vehiculo) => vehiculo.plate === placa
+    );
+
+    if (vehiculoExistente) {
+      // Si el vehículo ya existe, usamos su id
+      setIdVehiculo(vehiculoExistente.id);
+    } else {
+      // Si no existe, lo creamos y obtenemos su id
+      const body = JSON.stringify({
+        plate: placa,
+        typeVehicle: tipoVehiculoSeleccionado,
+        brand: marcaSeleccionada,
+        color: color,
+      });
+
+      const requestOptionsPost = {
+        method: "POST",
+        headers: myHeaders,
+        body: body,
+        redirect: "follow",
+      };
+
+      const responsePost = await fetch(
+        "http://localhost:8081/api/vehicles",
+        requestOptionsPost
+      );
+      if (!responsePost.ok) {
+        throw new Error(
+          `Error al registrar el vehículo: ${responsePost.status}`
+        );
+      }
+      const nuevoVehiculo = await responsePost.json();
+      setIdVehiculo(nuevoVehiculo.id);
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       // 1. Buscar si el vehículo ya existe por placa
-      const response = await fetch(
-        "http://localhost:8081/api/vehicles",
-        requestOptions
-      );
-      if (!response.ok) {
-        throw new Error(`Error al consultar los vehículos: ${response.status}`);
-      }
-      const vehiculos = await response.json();
-
-      // 2. Buscar el vehículo por placa
-      const vehiculoExistente = vehiculos.find(
-        (vehiculo) => vehiculo.plate === placa
-      );
-
-      let idVehiculo;
-
-      if (vehiculoExistente) {
-        // Si el vehículo ya existe, usamos su id
-        idVehiculo = vehiculoExistente.id;
-      } else {
-        debugger;
-        // Si no existe, lo creamos y obtenemos su id
-        const body = JSON.stringify({
-          plate: placa,
-          typeVehicle: tipoVehiculoSeleccionado,
-          brand: marcaSeleccionada,
-          color: color,
-        });
-
-        const requestOptionsPost = {
-          method: "POST",
-          headers: myHeaders,
-          body: body,
-          redirect: "follow",
-        };
-
-        const responsePost = await fetch(
-          "http://localhost:8081/api/vehicles",
-          requestOptionsPost
-        );
-        if (!responsePost.ok) {
-          throw new Error(
-            `Error al registrar el vehículo: ${responsePost.status}`
-          );
-        }
-        const nuevoVehiculo = await responsePost.json();
-        idVehiculo = nuevoVehiculo.id;
-      }
-
+      await obtenerVehiculo();
       // 3. Preparar los datos para registrar el servicio
       const datos = {
         email: correoCliente,
@@ -360,11 +426,75 @@ function FormRegisterVehicles() {
       if (response.ok) {
         buscarVisitas();
       } else {
-        throw new Error("Error al eliminar el registro");
+        throw new Error("Error al eliminar la visita");
       }
     } catch (error) {
       Swal.fire("Error", error.message, "error");
     }
+  };
+
+  const editarVisita = async () => {
+    try {
+      await obtenerVehiculo();
+
+      const datos = {
+        email: correoCliente,
+        services: serviciosSeleccionados,
+        vehicle: {
+          id: idVehiculo,
+        },
+        user: {
+          id: 2,
+        },
+      };
+      const response = await fetch(
+        `http://localhost:8081/api/registers/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+          body: JSON.stringify(datos),
+        }
+      );
+      if (response.ok) {
+        registroVehiculoExitoso();
+      } else {
+        throw new Error("Error al editar la visita");
+      }
+    } catch (error) {
+      Swal.fire("Error", error.message, "error");
+    }
+  };
+
+  const cargarDatosEditar = (item) => {
+    setRegistroEditar(true);
+    setId(item.id);
+    setPlaca(item.placa);
+    setColor(item.color || "");
+    setCorreoCliente(item.correo);
+
+    // Si marca y tipo son objetos, usa .id, si son string, usa el string
+    setMarcaSeleccionada(
+      marcas.find((m) => m.id === (item.marca.id || item.marca)) || null
+    );
+    setTipoVehiculoSeleccionado(
+      tiposVehiculo.find((t) => t.id === (item.tipo.id || item.tipo)) || null
+    );
+
+    // Para servicios seleccionados
+    setServiciosSeleccionados(
+      (item.serviciosOriginal || []).map((s) => ({ id: s.id }))
+    );
+
+    setOpen(true);
+  };
+
+  const cerrarModal = () => {
+    setOpen(false);
+    setRegistroEditar(null);
+    limpiarFormulario();
   };
 
   return (
@@ -379,6 +509,7 @@ function FormRegisterVehicles() {
 
         <section className="flex flex-col items-end px-4 mt-5 mb-5">
           <button
+            id="btn-registrar-visita"
             className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
             type="button"
             onClick={() => setOpen(true)}
@@ -391,10 +522,10 @@ function FormRegisterVehicles() {
           <div className="w-full max-w-xs">
             <ControlPanel />
           </div>
-          <div className="flex-1">
+          <div id="table" className="flex-1">
             <Modal
               isOpen={open}
-              onClose={() => setOpen(false)}
+              onClose={() => cerrarModal()}
               title="Registro de Vehículos"
             >
               <h2 className="text-2xl font-bold mb-4 text-center">
@@ -542,20 +673,29 @@ function FormRegisterVehicles() {
                     className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
                     type="button"
                     onClick={() => {
-                      setOpen(false);
-                      limpiarFormulario();
+                      cerrarModal();
                     }}
                   >
                     Cancelar
                   </button>
 
-                  <button
-                    className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
-                    type="button"
-                    onClick={handleSubmit}
-                  >
-                    Registrar
-                  </button>
+                  {registroEditar ? (
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
+                      type="button"
+                      onClick={editarVisita}
+                    >
+                      Editar
+                    </button>
+                  ) : (
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold py-1 px-3 rounded"
+                      type="button"
+                      onClick={handleSubmit}
+                    >
+                      Registrar
+                    </button>
+                  )}
                 </div>
               </form>
             </Modal>
@@ -589,6 +729,14 @@ function FormRegisterVehicles() {
               </span>
             </div>
           </div>
+        </section>
+
+        <section className="flex justify-end w-full">
+          <img
+            className="cursor-pointer"
+            src={QuestionImg}
+            onClick={() => driverObj.drive()}
+          />
         </section>
       </main>
     </>
