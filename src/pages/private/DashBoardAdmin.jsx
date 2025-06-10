@@ -124,7 +124,7 @@ function DashBoardAdmin() {
           <ControlPanel />
 
           <div id="parteDos">
-            <h3>Visitas Ingresadas</h3>
+            <h3>Visitas Registradas</h3>
             <p style={{ textAlign: "center", fontSize: "3rem", margin: "5px" }}>
               {totalVehiculos}
             </p>

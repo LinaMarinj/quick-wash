@@ -92,7 +92,7 @@ function Recompensas() {
                       <td className="py-2 px-4">
                         Con nuestro logo personalizado
                       </td>
-                      <td className="py-2 px-4">8 visitas</td>
+                      <td className="py-2 px-4">10 visitas</td>
                     </tr>
                     <tr className="border-t">
                       <td className="py-2 px-4">
@@ -116,7 +116,7 @@ function Recompensas() {
                       </td>
                       <td className="py-2 px-4 font-semibold">Lavado Gratis</td>
                       <td className="py-2 px-4">externo</td>
-                      <td className="py-2 px-4">12 visitas</td>
+                      <td className="py-2 px-4">20 visitas</td>
                     </tr>
                     <tr className="border-t">
                       <td className="py-2 px-4">

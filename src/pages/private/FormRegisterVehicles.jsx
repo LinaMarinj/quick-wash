@@ -383,8 +383,29 @@ function FormRegisterVehicles() {
     setIdVehiculo(nuevoVehiculo.id);
   };
 
+  function validarCampos() {
+    if (
+      !placa.trim() ||
+      !marcaSeleccionada ||
+      !color.trim() ||
+      !tipoVehiculoSeleccionado ||
+      !correoCliente.trim() ||
+      serviciosSeleccionados.length === 0
+    ) {
+      Swal.fire(
+        "Campos requeridos",
+        "Por favor completa todos los campos obligatorios.",
+        "warning"
+      );
+      return false;
+    }
+    return true;
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!validarCampos()) return;
 
     try {
       // 1. Buscar si el vehículo ya existe por placa
@@ -415,7 +436,6 @@ function FormRegisterVehicles() {
         }
       );
 
-      debugger;
       if (responseRegister.ok) {
         buscarVisitas();
         registroVehiculoExitoso();
@@ -539,7 +559,7 @@ function FormRegisterVehicles() {
       <main id="mainDasboard">
         <section className="px-4">
           <h1 className="text-4xl font-bold mt-4 mb-8 text-center">
-            Gestion de Visitas
+            Gestión de Visitas
           </h1>
         </section>
 
@@ -745,10 +765,10 @@ function FormRegisterVehicles() {
             <br />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span className="mr-5">
-                Total Pages: {pagination.state.getTotalPages(visitasTabla)}
+                Total Páginas: {pagination.state.getTotalPages(visitasTabla)}
               </span>
               <span>
-                Page:{" "}
+                Página:{" "}
                 {pagination.state.getPages(visitasTabla).map((_, index) => (
                   <button
                     key={index}
