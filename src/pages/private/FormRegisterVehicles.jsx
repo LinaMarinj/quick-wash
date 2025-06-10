@@ -580,7 +580,7 @@ function FormRegisterVehicles() {
                       name="placa"
                       className="w-full border bg-gray-50 border-gray-300 rounded px-2 py-1"
                       value={placa}
-                      onChange={(e) => setPlaca(e.target.value)}
+                      onChange={(e) => setPlaca(e.target.value.toUpperCase())}
                     />
                   </div>
 
