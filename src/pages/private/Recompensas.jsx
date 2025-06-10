@@ -53,8 +53,8 @@ function Recompensas() {
             </header>
 
             <section className="recompensas-list">
-              <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+              <div className="overflow-x-auto rounded-lg">
+                <table className="min-w-full bg-white border-gray-200 shadow-md">
                   <thead className="bg-red-600 text-white">
                     <tr>
                       <th className="py-2 px-4 text-left">Foto</th>

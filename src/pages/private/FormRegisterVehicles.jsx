@@ -15,7 +15,6 @@ import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import QuestionImg from "../../assets/img/icons/question.png";
 
-
 function FormRegisterVehicles() {
   const driverObj = driver({
     showProgress: true,
@@ -137,6 +136,7 @@ function FormRegisterVehicles() {
 
   const visitasTabla = visitas.map((item) => ({
     id: item.id,
+    idVehiculo: item.vehicle?.id || 0,
     placa: item.vehicle?.plate || "",
     servicios: item.services.map((s) => s.name).join(", "),
     correo: item.email || "",
@@ -352,6 +352,33 @@ function FormRegisterVehicles() {
     }
   };
 
+  const editarVehiculo = async () => {
+    // Si no existe, lo creamos y obtenemos su id
+    const body = JSON.stringify({
+      plate: placa,
+      typeVehicle: tipoVehiculoSeleccionado,
+      brand: marcaSeleccionada,
+      color: color,
+    });
+
+    const requestOptionsPut = {
+      method: "PUT",
+      headers: myHeaders,
+      body: body,
+      redirect: "follow",
+    };
+
+    const responsePost = await fetch(
+      `http://localhost:8081/api/vehicles/${idVehiculo}`,
+      requestOptionsPut
+    );
+    if (!responsePost.ok) {
+      throw new Error(`Error al editar el vehículo: ${responsePost.status}`);
+    }
+    const nuevoVehiculo = await responsePost.json();
+    setIdVehiculo(nuevoVehiculo.id);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -384,6 +411,7 @@ function FormRegisterVehicles() {
       );
 
       if (responseRegister.ok) {
+        buscarVisitas();
         registroVehiculoExitoso();
       } else {
         throw new Error("Error al registrar el servicio del vehículo");
@@ -435,7 +463,7 @@ function FormRegisterVehicles() {
 
   const editarVisita = async () => {
     try {
-      await obtenerVehiculo();
+      await editarVehiculo();
 
       const datos = {
         email: correoCliente,
@@ -459,6 +487,7 @@ function FormRegisterVehicles() {
         }
       );
       if (response.ok) {
+        buscarVisitas();
         registroVehiculoExitoso();
       } else {
         throw new Error("Error al editar la visita");
@@ -470,6 +499,7 @@ function FormRegisterVehicles() {
 
   const cargarDatosEditar = (item) => {
     setRegistroEditar(true);
+    setIdVehiculo(item.idVehiculo);
     setId(item.id);
     setPlaca(item.placa);
     setColor(item.color || "");
