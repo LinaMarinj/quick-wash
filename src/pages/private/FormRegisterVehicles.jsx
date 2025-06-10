@@ -167,7 +167,7 @@ function FormRegisterVehicles() {
   };
 
   function buscarVisitas() {
-    // Función de  busueda de tipos de vehículo
+    // Función de búsqueda de visitas, ordena de más reciente a más antiguo
     return fetch("http://localhost:8081/api/registers", requestOptions)
       .then((response) => {
         if (response.ok) {
@@ -177,7 +177,13 @@ function FormRegisterVehicles() {
         }
       })
       .then((data) => {
-        setVisitas(data);
+        // Ordenar por fecha descendente (más reciente primero)
+        const visitasOrdenadas = [...data].sort((a, b) => {
+          const fechaA = new Date(a.registerDate).getTime();
+          const fechaB = new Date(b.registerDate).getTime();
+          return fechaB - fechaA;
+        });
+        setVisitas(visitasOrdenadas);
       })
       .catch((error) => {
         console.error(error);
@@ -305,50 +311,50 @@ function FormRegisterVehicles() {
   };
 
   // Cambia obtenerVehiculo para que retorne el id:
-const obtenerVehiculo = async () => {
-  const response = await fetch(
-    "http://localhost:8081/api/vehicles",
-    requestOptions
-  );
-  if (!response.ok) {
-    throw new Error(`Error al consultar los vehículos: ${response.status}`);
-  }
-  const vehiculos = await response.json();
-
-  const vehiculoExistente = vehiculos.find(
-    (vehiculo) => vehiculo.plate === placa
-  );
-
-  if (vehiculoExistente) {
-    return vehiculoExistente.id;
-  } else {
-    const body = JSON.stringify({
-      plate: placa,
-      typeVehicle: tipoVehiculoSeleccionado,
-      brand: marcaSeleccionada,
-      color: color,
-    });
-
-    const requestOptionsPost = {
-      method: "POST",
-      headers: myHeaders,
-      body: body,
-      redirect: "follow",
-    };
-
-    const responsePost = await fetch(
+  const obtenerVehiculo = async () => {
+    const response = await fetch(
       "http://localhost:8081/api/vehicles",
-      requestOptionsPost
+      requestOptions
     );
-    if (!responsePost.ok) {
-      throw new Error(
-        `Error al registrar el vehículo: ${responsePost.status}`
-      );
+    if (!response.ok) {
+      throw new Error(`Error al consultar los vehículos: ${response.status}`);
     }
-    const nuevoVehiculo = await responsePost.json();
-    return nuevoVehiculo.id;
-  }
-};
+    const vehiculos = await response.json();
+
+    const vehiculoExistente = vehiculos.find(
+      (vehiculo) => vehiculo.plate === placa
+    );
+
+    if (vehiculoExistente) {
+      return vehiculoExistente.id;
+    } else {
+      const body = JSON.stringify({
+        plate: placa,
+        typeVehicle: tipoVehiculoSeleccionado,
+        brand: marcaSeleccionada,
+        color: color,
+      });
+
+      const requestOptionsPost = {
+        method: "POST",
+        headers: myHeaders,
+        body: body,
+        redirect: "follow",
+      };
+
+      const responsePost = await fetch(
+        "http://localhost:8081/api/vehicles",
+        requestOptionsPost
+      );
+      if (!responsePost.ok) {
+        throw new Error(
+          `Error al registrar el vehículo: ${responsePost.status}`
+        );
+      }
+      const nuevoVehiculo = await responsePost.json();
+      return nuevoVehiculo.id;
+    }
+  };
 
   const editarVehiculo = async () => {
     // Si no existe, lo creamos y obtenemos su id
