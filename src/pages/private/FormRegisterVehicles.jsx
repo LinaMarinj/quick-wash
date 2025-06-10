@@ -410,6 +410,7 @@ function FormRegisterVehicles() {
         }
       );
 
+      debugger;
       if (responseRegister.ok) {
         buscarVisitas();
         registroVehiculoExitoso();

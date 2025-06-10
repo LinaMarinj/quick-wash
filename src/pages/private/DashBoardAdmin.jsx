@@ -59,6 +59,8 @@ function DashBoardAdmin() {
     ],
   });
   const [totalVehiculos, setTotalVehiculos] = useState(0);
+  const [totalServicios, setTotalServicios] = useState(0);
+
   const myHeaders = new Headers();
   myHeaders.append("Authorization", "Bearer " + localStorage.getItem("token"));
 
@@ -74,15 +76,36 @@ function DashBoardAdmin() {
         if (res.ok) {
           return res.json();
         } else {
-          throw new Error("Error al obtener el total.");
+          throw new Error("Error al obtener el total de las visitas.");
         }
       })
       .then((data) => {
         setTotalVehiculos(Array.isArray(data) ? data.length : data.total || 0);
       })
       .catch((error) => {
-        console.error("Error al cargar cantidad:", error);
+        console.error("Error al cargar cantidad de visitas:", error);
         setTotalVehiculos(0);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:8081/api/registers", requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Error al obtener los servicios.");
+        }
+      })
+      .then((data) => {
+        const total = Array.isArray(data)
+          ? data.reduce((acc, reg) => acc + (reg.services?.length || 0), 0)
+          : 0;
+        setTotalServicios(total);
+      })
+      .catch((error) => {
+        console.error("Error al cargar cantidad de servicios:", error);
+        setTotalServicios(0);
       });
   }, []);
 
@@ -110,7 +133,7 @@ function DashBoardAdmin() {
           <div id="parteTres">
             <h3>Servicios Realizados</h3>
             <p style={{ textAlign: "center", fontSize: "3rem", margin: "5px" }}>
-              100
+              {totalServicios}
             </p>
             <p>En total</p>
           </div>

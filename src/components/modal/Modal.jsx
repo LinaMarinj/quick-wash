@@ -34,7 +34,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     >
       <div
         ref={modalRef}
-        className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 transform transition-all duration-300 opacity-0 translate-y-8"
+        className="max-h-[90vh] overflow-y-auto bg-white rounded-lg shadow-lg w-full max-w-md mx-4 transform transition-all duration-300 opacity-0 translate-y-8"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-end items-center px-4 py-2">
@@ -46,7 +46,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
             &times;
           </button>
         </div>
-        <div className="p-4">{children}</div>
+        <div className="p-4 overflow-auto">{children}</div>
       </div>
     </div>
   );
